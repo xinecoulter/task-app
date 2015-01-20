@@ -11,6 +11,13 @@ class Task < ActiveRecord::Base
     task
   end
 
+  def self.find_and_update(id, params)
+    task = find(id)
+    params[:interval] = calculate_interval(params[:interval_number].to_i, params[:interval_type])
+    task.update(params)
+    task
+  end
+
   def self.calculate_interval(interval_number, interval_type)
     case interval_type
     when "days"
