@@ -10,4 +10,6 @@ Rails.application.routes.draw do
     post '/' => 'devise/sessions#create', as: :user_session
     delete 'signout' => 'devise/sessions#destroy', as: :destroy_user_session
   end
+
+  resources :tasks, only: [:new, :create]
 end
