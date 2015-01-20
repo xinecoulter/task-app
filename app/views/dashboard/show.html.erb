@@ -4,7 +4,8 @@
 <% if @tasks.any? %>
   <ul>
     <% @tasks.each do |task| %>
-      <li><%= task.name %></li>
+      <li><%= task.name %>
+      <%= link_to('[Edit]', edit_task_path(task.id), method: :get) %></li>
     <% end %>
   </ul>
 <% else %>
