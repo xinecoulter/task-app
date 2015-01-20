@@ -5,7 +5,8 @@
   <ul>
     <% @tasks.each do |task| %>
       <li><%= task.name %>
-      <%= link_to('[Edit]', edit_task_path(task.id), method: :get) %></li>
+      <%= link_to('[Edit]', edit_task_path(task.id), method: :get) %>
+      <%= link_to('[x]', task, method: :delete) %></li>
     <% end %>
   </ul>
 <% else %>
