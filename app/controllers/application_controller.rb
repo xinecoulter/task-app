@@ -4,4 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :authenticate_user!
+
+  def authorize_with_transaction!(ability)
+    ActiveRecord::Base.transaction do
+      object = yield
+      authorize! ability, object
+      object
+    end
+  end
 end
