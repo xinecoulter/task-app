@@ -1,25 +1,32 @@
 class TasksController < ApplicationController
   def new
-    @task = Task.new
+    @task = Task.new(user: current_user)
+    authorize! :create, @task
   end
 
   def create
-    Task.make(current_user.id, task_params)
+    task = authorize_with_transaction!(:create) do
+      Task.make(current_user.id, task_params)
+    end
     redirect_to root_path
   end
 
   def edit
     @task = Task.find(params[:id])
+    authorize! :update, @task
   end
 
   def update
-    Task.find_and_update(params[:id], task_params)
+    task = authorize_with_transaction!(:update) do
+      Task.find_and_update(params[:id], task_params)
+    end
     redirect_to root_path
   end
 
   def destroy
     id = params[:id]
     task = Task.find(id)
+    authorize! :destroy, task
     task.destroy!
     redirect_to root_path
   end
