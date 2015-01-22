@@ -41,3 +41,7 @@ gem 'spring',        group: :development
 
 gem 'devise'
 gem 'cancancan'
+
+group :development, :test do
+  gem 'rspec-rails'
+end
