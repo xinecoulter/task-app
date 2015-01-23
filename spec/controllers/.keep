@@ -1,0 +1,12 @@
+Unstaged changes after reset:
+M	Gemfile
+M	Gemfile.lock
+D	test/controllers/.keep
+D	test/fixtures/.keep
+D	test/fixtures/users.yml
+D	test/helpers/.keep
+D	test/integration/.keep
+D	test/mailers/.keep
+D	test/models/.keep
+D	test/models/user_test.rb
+D	test/test_helper.rb
