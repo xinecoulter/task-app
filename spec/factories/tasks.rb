@@ -7,5 +7,10 @@ FactoryGirl.define do
       "task ##{n}"
     end
     description { generate(:random_task_desc) }
+    sequence :interval_number do |n|
+      n
+    end
+    interval 86400
+    interval_type "days"
   end
 end

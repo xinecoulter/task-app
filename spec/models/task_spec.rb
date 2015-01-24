@@ -1,11 +1,48 @@
 require "rails_helper"
 
 describe Task do
-  let(:task) { build(:task) }
   it "can be created" do
+    task = build(:task)
     task.save!
     expect(task).to be_persisted
     expect(task.class).to eq(Task)
+  end
+
+  it "must have a name" do
+    task = build(:task, name: nil)
+    expect { task.save! }.to raise_error
+  end
+
+  it "can have a description" do
+    assert(build(:task, description: "You need to do the thing.").valid?)
+    assert(build(:task, description: nil).valid?)
+  end
+
+  it "can have a last_completed_at" do
+    assert(build(:task, last_completed_at: DateTime.now).valid?)
+    assert(build(:task, last_completed_at: nil).valid?)
+  end
+
+  it "must have an interval" do
+    task = build(:task, interval: nil)
+    expect { task.save! }.to raise_error
+  end
+
+  it "must have an interval_number" do
+    task = build(:task, interval_number: nil)
+    expect { task.save! }.to raise_error
+  end
+
+  it "must have an interval_type" do
+    task = build(:task, interval_type: nil)
+    expect { task.save! }.to raise_error
+  end
+
+  it "must have an interval_type of either 'days', 'weeks', 'months'" do
+    assert(build(:task, interval_type: "days").valid?)
+    assert(build(:task, interval_type: "weeks").valid?)
+    assert(build(:task, interval_type: "months").valid?)
+    assert(build(:task, interval_type: "years").invalid?)
   end
 
   describe ".make" do
@@ -16,7 +53,7 @@ describe Task do
     let(:interval_type) { "weeks" }
     let(:params) { { name: name, description: description, interval_number: interval_number,
       interval_type: interval_type } }
-    before { Task.stub(:calculate_interval) }
+    before { Task.stub(:calculate_interval) { 86400 } }
     subject { Task.make(user.id, params) }
 
     it "makes a new task" do

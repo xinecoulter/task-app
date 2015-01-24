@@ -1,6 +1,11 @@
 class Task < ActiveRecord::Base
   belongs_to :user
 
+  validates_presence_of :name
+  validates_presence_of :interval
+  validates_presence_of :interval_number
+  validates_inclusion_of :interval_type, in: %w[days weeks months]
+
   def self.make(user_id, params)
     task = Task.new(params)
     task.user_id = user_id
