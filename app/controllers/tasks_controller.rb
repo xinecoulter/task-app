@@ -8,7 +8,11 @@ class TasksController < ApplicationController
     task = authorize_with_transaction!(:create) do
       Task.make(current_user.id, task_params)
     end
-    redirect_to root_path
+    if task.valid?
+      redirect_to root_path
+    else
+      render :new
+    end
   end
 
   def edit
@@ -17,10 +21,14 @@ class TasksController < ApplicationController
   end
 
   def update
-    task = authorize_with_transaction!(:update) do
+    @task = authorize_with_transaction!(:update) do
       Task.find_and_update(params[:id], task_params)
     end
-    redirect_to root_path
+    if @task.valid?
+      redirect_to root_path
+    else
+      render :edit
+    end
   end
 
   def destroy
