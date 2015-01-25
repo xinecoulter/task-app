@@ -1,4 +1,9 @@
 class TasksController < ApplicationController
+  def index
+    @tasks = current_user.tasks
+    render :index
+  end
+
   def new
     @task = Task.new(user: current_user)
     authorize! :create, @task

@@ -6,6 +6,20 @@ describe TasksController do
   let(:user) { create(:user) }
   before { sign_in user }
 
+  describe "GET 'index'" do
+    subject { get :index }
+
+    it "stores the user's tasks as @tasks" do
+      subject
+      assert(user.tasks == assigns(:tasks))
+    end
+
+    it "renders the :index template" do
+      subject
+      expect(response).to render_template :index
+    end
+  end
+
   describe "GET 'new'" do
     subject { get :new }
 
