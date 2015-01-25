@@ -16,7 +16,9 @@ class Task < ActiveRecord::Base
 
   def self.find_and_update(id, params)
     task = find(id)
-    params[:interval] = calculate_interval(params[:interval_number].to_i, params[:interval_type])
+    if params[:interval_number] && params[:interval_type]
+      params[:interval] = calculate_interval(params[:interval_number].to_i, params[:interval_type])
+    end
     task.update(params)
     task
   end

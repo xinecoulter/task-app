@@ -94,9 +94,19 @@ describe Task do
       assert(subject.interval_type = interval_type)
     end
 
-    it "sends a message to Task.calculate_interval" do
-      Task.should_receive(:calculate_interval).with(interval_number.to_i, interval_type)
-      subject
+    context "when interval_number and interval_type are included in params" do
+      it "sends a message to Task.calculate_interval" do
+        Task.should_receive(:calculate_interval).with(interval_number.to_i, interval_type)
+        subject
+      end
+    end
+
+    context "when interval_number and interval_type are not included in params" do
+      let(:params) { { name: name, description: description } }
+      it "does not send a message to Task.calculate_interval" do
+        Task.should_not_receive(:calculate_interval)
+        subject
+      end
     end
   end
 
