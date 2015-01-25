@@ -44,6 +44,7 @@ gem 'cancancan'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'pry-rails'
 end
 
 group :test do
