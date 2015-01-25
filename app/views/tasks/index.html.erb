@@ -1,0 +1,14 @@
+<h1>Your Tasks</h1>
+<%= link_to('Add Task', new_task_path, method: :get) %>
+
+<% if @tasks.any? %>
+  <ul>
+    <% @tasks.each do |task| %>
+      <li><%= task.name %>
+      <%= link_to('[Edit]', edit_task_path(task.id), method: :get) %>
+      <%= link_to('[x]', task, method: :delete) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You don't have any tasks!</p>
+<% end %>
