@@ -6,6 +6,7 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new(user: current_user)
+    @icons = TaskIcon.all
     authorize! :create, @task
   end
 
@@ -22,6 +23,7 @@ class TasksController < ApplicationController
 
   def edit
     @task = Task.find(params[:id])
+    @icons = TaskIcon.all
     authorize! :update, @task
   end
 
@@ -47,6 +49,7 @@ class TasksController < ApplicationController
 private
 
   def task_params
-    params.require(:task).permit(:name, :description, :last_completed_at, :interval_number, :interval_type, :last_completed_at)
+    params.require(:task).permit(:name, :description, :last_completed_at, :interval_number, :interval_type,
+      :last_completed_at, :task_icon_id)
   end
 end

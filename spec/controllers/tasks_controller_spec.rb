@@ -21,6 +21,8 @@ describe TasksController do
   end
 
   describe "GET 'new'" do
+    let!(:task_icon1) { create(:task_icon) }
+    let!(:task_icon2) { create(:task_icon) }
     subject { get :new }
 
     it "checks authorization" do
@@ -28,6 +30,11 @@ describe TasksController do
       Task.stub(:new) { new_task }
       controller.should_receive(:authorize!).with(:create, new_task)
       subject
+    end
+
+    it "assigns all task_icons to @icons" do
+      subject
+      assert(TaskIcon.all == assigns(:icons))
     end
 
     it "renders the :new template" do
@@ -74,11 +81,18 @@ describe TasksController do
 
   describe "GET 'edit'" do
     let(:task) { create(:task, user: user) }
+    let!(:task_icon1) { create(:task_icon) }
+    let!(:task_icon2) { create(:task_icon) }
     subject { get :edit, id: task.id }
 
     it "finds the task" do
       subject
       assert(task == assigns(:task))
+    end
+
+    it "assigns all task_icons to @icons" do
+      subject
+      assert(TaskIcon.all == assigns(:icons))
     end
 
     it "checks authorization" do

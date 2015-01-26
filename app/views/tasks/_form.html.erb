@@ -7,5 +7,12 @@
   <%= f.select :interval_number, (1..31) %>
   <%= f.select :interval_type, %w[days weeks months] %>
   </div>
+  <div>
+  <%= f.label "icon" %>
+  <% @icons.each do |icon| %>
+    <%= image_tag("task_icons/#{icon.file_name}") %>
+    <%= f.radio_button :task_icon_id, icon.id %>
+  <% end %>
+  </div>
   <%= f.submit %>
 <% end %>
