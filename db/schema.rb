@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150124052041) do
+ActiveRecord::Schema.define(version: 20150126014235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "task_icons", force: true do |t|
+    t.string   "file_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tasks", force: true do |t|
     t.string   "name"
@@ -26,6 +32,7 @@ ActiveRecord::Schema.define(version: 20150124052041) do
     t.datetime "updated_at"
     t.integer  "interval_number"
     t.string   "interval_type"
+    t.integer  "task_icon_id"
   end
 
   create_table "users", force: true do |t|
