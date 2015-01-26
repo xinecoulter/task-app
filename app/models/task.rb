@@ -1,5 +1,6 @@
 class Task < ActiveRecord::Base
   belongs_to :user
+  belongs_to :task_icon
 
   validates_presence_of :name
   validates_presence_of :interval
