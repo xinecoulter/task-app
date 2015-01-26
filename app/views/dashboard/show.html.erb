@@ -1,16 +1,18 @@
-<%= link_to('Log out', destroy_user_session_path, method: :delete) %>
-
-<h1>Your Tasks</h1>
 <% if @tasks.any? %>
   <ul>
     <% @tasks.each do |task| %>
-      <li><%= task.name %>
-      <%= link_to('[Edit]', edit_task_path(task.id), method: :get) %>
-      <%= link_to('[x]', task, method: :delete) %></li>
+      <li>
+        <%= task.name %>
+        <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now } ), method: :put do %>
+          <% if task.task_icon %>
+            <button type="submit"><%= image_tag("task_icons/#{task.task_icon.file_name}") %></button>
+          <% else %>
+            <button type="submit"><%= image_tag("task_icons/default_icon.png") %></button>
+          <% end %>
+        <% end %>
+      </li>
     <% end %>
   </ul>
 <% else %>
   <p>You don't have any tasks!</p>
 <% end %>
-
-<%= link_to('Add Task', new_task_path, method: :get) %>
