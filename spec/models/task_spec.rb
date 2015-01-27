@@ -132,4 +132,22 @@ describe Task do
       end
     end
   end
+
+  describe "#task_due" do
+    let!(:current_time) { DateTime.now }
+    before { DateTime.stub(:now) { current_time } }
+    subject { task.task_due }
+    context "when last_completed_at is nil" do
+      let(:task) { create(:task, last_completed_at: nil) }
+      it "is DateTime.now" do
+        assert(current_time == subject)
+      end
+    end
+    context "when last_completed_at is not nil" do
+      let(:task) { create(:task, last_completed_at: 1.day.ago) }
+      it "is the sum of last_completed_at and interval" do
+        assert(task.last_completed_at + task.interval == subject)
+      end
+    end
+  end
 end

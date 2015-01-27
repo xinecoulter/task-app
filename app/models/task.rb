@@ -35,4 +35,12 @@ class Task < ActiveRecord::Base
     end
     interval_number * seconds_multiplier
   end
+
+  def task_due
+    if last_completed_at.nil?
+      DateTime.now
+    else
+      last_completed_at + interval
+    end
+  end
 end
