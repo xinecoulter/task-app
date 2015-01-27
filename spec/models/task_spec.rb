@@ -150,4 +150,29 @@ describe Task do
       end
     end
   end
+
+  describe "#ready_for_completion?" do
+    let(:task) { create(:task) }
+    let!(:current_time) { DateTime.now }
+    before { DateTime.stub(:now) { current_time } }
+    subject { task.ready_for_completion? }
+    context "when DateTime.now is after when the task is due" do
+      before { task.stub(:task_due) { 1.day.ago } }
+      it "is true" do
+        assert(subject)
+      end
+    end
+    context "when DateTime.now is the same as when the task is due" do
+      before { task.stub(:task_due) { current_time } }
+      it "is true" do
+        assert(subject)
+      end
+    end
+    context "when DateTime.now is before when the task is due" do
+      before { task.stub(:task_due) { 1.day.from_now } }
+      it "is false" do
+        assert(!subject)
+      end
+    end
+  end
 end

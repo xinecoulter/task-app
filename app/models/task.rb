@@ -43,4 +43,8 @@ class Task < ActiveRecord::Base
       last_completed_at + interval
     end
   end
+
+  def ready_for_completion?
+    DateTime.now >= task_due
+  end
 end
