@@ -16,3 +16,9 @@
 <% else %>
   <p>You don't have any tasks!</p>
 <% end %>
+
+<% @tasks.each do |task| %>
+  <%= content_tag "div", class: "progress-bar", id: "tasks-#{task.id}", data:
+      { interval: task.interval, due_date: task.task_due.to_f } do %>
+  <% end %>
+<% end %>
