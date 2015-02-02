@@ -1,29 +1,34 @@
 <% if @tasks.any? %>
-  <ul>
+  <div class="container">
     <% @tasks.each do |task| %>
-      <li>
-        <%= task.name %>
-        <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now } ), method: :put do %>
-          <% if task.task_icon %>
-            <button type="submit"><%= image_tag("task_icons/#{task.task_icon.file_name}") %></button>
-          <% else %>
-            <button type="submit"><%= image_tag("task_icons/default_icon.png") %></button>
-          <% end %>
-        <% end %>
-      </li>
+      <%= content_tag "div", class: "progress-bar", id: "tasks-#{task.id}", data:
+          { interval: task.interval, due_date: task.task_due.to_f, task_name: task.name } do %>
+          <div class="progress-label">
+            <% if task.ready_for_completion? %>
+              <%= "#{task.name}: DUE NOW!" %>
+            <% end %>
+          </div>
+      <% end %>
     <% end %>
-  </ul>
+  </div>
+  <div class="container">
+    <ul>
+      <% @tasks.each do |task| %>
+        <li>
+          <%= task.name %>
+          <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now } ), method: :put do %>
+            <% if task.task_icon %>
+              <button type="submit"><%= image_tag("task_icons/#{task.task_icon.file_name}") %></button>
+            <% else %>
+              <button type="submit"><%= image_tag("task_icons/default_icon.png") %></button>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 <% else %>
-  <p>You don't have any tasks!</p>
-<% end %>
-
-<% @tasks.each do |task| %>
-  <%= content_tag "div", class: "progress-bar", id: "tasks-#{task.id}", data:
-      { interval: task.interval, due_date: task.task_due.to_f, task_name: task.name } do %>
-      <div class = "progress-label">
-        <% if task.ready_for_completion? %>
-          <%= "#{task.name}: DUE NOW!" %>
-        <% end %>
-      </div>
-  <% end %>
+  <div class="container">
+    <h1>You don't have any tasks!</h1>
+  </div>
 <% end %>
