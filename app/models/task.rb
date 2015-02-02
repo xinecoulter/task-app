@@ -45,6 +45,7 @@ class Task < ActiveRecord::Base
   end
 
   def ready_for_completion?
+    return true if last_completed_at.nil?
     DateTime.now >= task_due
   end
 end

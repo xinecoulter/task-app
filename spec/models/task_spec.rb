@@ -156,20 +156,35 @@ describe Task do
     let!(:current_time) { DateTime.now }
     before { DateTime.stub(:now) { current_time } }
     subject { task.ready_for_completion? }
+    context "when the task has never been completed" do
+      before { task.stub_chain(:last_completed_at, :nil?) { true } }
+      it "is true" do
+        assert(subject)
+      end
+    end
     context "when DateTime.now is after when the task is due" do
-      before { task.stub(:task_due) { 1.day.ago } }
+      before do
+        task.stub_chain(:last_completed_at, :nil?) { false }
+        task.stub(:task_due) { 1.day.ago }
+      end
       it "is true" do
         assert(subject)
       end
     end
     context "when DateTime.now is the same as when the task is due" do
-      before { task.stub(:task_due) { current_time } }
+      before do
+        task.stub_chain(:last_completed_at, :nil?) { false }
+        task.stub(:task_due) { current_time }
+      end
       it "is true" do
         assert(subject)
       end
     end
     context "when DateTime.now is before when the task is due" do
-      before { task.stub(:task_due) { 1.day.from_now } }
+      before do
+        task.stub_chain(:last_completed_at, :nil?) { false }
+        task.stub(:task_due) { 1.day.from_now }
+      end
       it "is false" do
         assert(!subject)
       end
