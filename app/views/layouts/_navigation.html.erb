@@ -1,9 +1,20 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
-    <ul class="nav navbar-nav">
-      <li><%= link_to("Dashboard", root_path, method: :get) %></li>
-      <li><%= link_to("Manage Tasks", tasks_path, method: :get) %></li>
-      <li><%= link_to("Log Out", destroy_user_session_path, method: :delete) %></li>
-    </ul>
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to("World of Tasks", root_path, method: :get, class: "navbar-brand") %>
+    </div>
+    <div class="navbar-collapse collapse", id="navbar">
+      <ul class="nav navbar-nav">
+        <li><%= link_to("Dashboard", root_path, method: :get) %></li>
+        <li><%= link_to("Manage Tasks", tasks_path, method: :get) %></li>
+        <li><%= link_to("Log Out", destroy_user_session_path, method: :delete) %></li>
+      </ul>
+    </div>
   </div>
 </nav>
