@@ -132,9 +132,19 @@ describe TasksController do
         assert_raises(Exception) { subject }
       end
 
-      it "redirects to the tasks index" do
-        subject
-        assert_redirected_to tasks_path
+      context "when param[:task][:redirect_to_dashboard] is true" do
+      let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", redirect_to_dashboard: true } }
+        it "redirects to the root path" do
+          subject
+          assert_redirected_to root_path
+        end
+      end
+
+      context "when param[:task][:redirect_to_dashboard] is not true" do
+        it "redirects to the tasks index" do
+          subject
+          assert_redirected_to tasks_path
+        end
       end
     end
 

@@ -14,7 +14,7 @@
   <div class="task-icon-bar">
     <% @tasks.each do |task| %>
       <div class="task-icon-button">
-        <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now } ), method: :put do %>
+        <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now, redirect_to_dashboard: true } ), method: :put do %>
           <% if task.task_icon %>
             <button type="submit"><%= image_tag("task_icons/#{task.task_icon.file_name}") %></button>
           <% else %>

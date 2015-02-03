@@ -31,7 +31,9 @@ class TasksController < ApplicationController
     @task = authorize_with_transaction!(:update) do
       Task.find_and_update(params[:id], task_params)
     end
-    if @task.valid?
+    if @task.valid? && params[:task][:redirect_to_dashboard]
+      redirect_to root_path
+    elsif @task.valid?
       redirect_to tasks_path
     else
       render :edit
