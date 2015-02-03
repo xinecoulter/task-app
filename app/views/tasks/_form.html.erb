@@ -5,7 +5,7 @@
   <%= f.text_area :description  %></div>
   <div><%= f.label :interval %><br />
   <%= f.select :interval_number, (1..31) %>
-  <%= f.select :interval_type, %w[days weeks months] %>
+  <%= f.select :interval_type, Task::INTERVAL_TYPES %>
   </div>
   <div>
   <%= f.label "icon" %>

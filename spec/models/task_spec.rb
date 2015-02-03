@@ -38,11 +38,11 @@ describe Task do
     expect { task.save! }.to raise_error
   end
 
-  it "must have an interval_type of either 'days', 'weeks', 'months'" do
-    assert(build(:task, interval_type: "days").valid?)
-    assert(build(:task, interval_type: "weeks").valid?)
-    assert(build(:task, interval_type: "months").valid?)
-    assert(build(:task, interval_type: "years").invalid?)
+  it "must have an interval_type of either 'day', 'week', 'month'" do
+    assert(build(:task, interval_type: "day").valid?)
+    assert(build(:task, interval_type: "week").valid?)
+    assert(build(:task, interval_type: "month").valid?)
+    assert(build(:task, interval_type: "year").invalid?)
   end
 
   describe ".make" do
@@ -50,7 +50,7 @@ describe Task do
     let(:name) { "Laundry" }
     let(:description) { "Clean and fold laundry!" }
     let(:interval_number) { "2" }
-    let(:interval_type) { "weeks" }
+    let(:interval_type) { "week" }
     let(:params) { { name: name, description: description, interval_number: interval_number,
       interval_type: interval_type } }
     before { Task.stub(:calculate_interval) { 86400 } }
@@ -113,20 +113,20 @@ describe Task do
   describe ".calculate_interval" do
     let(:interval_number) { 1 }
     subject { Task.calculate_interval(interval_number, interval_type) }
-    context "when interval_type is 'days'" do
-      let(:interval_type) { "days" }
+    context "when interval_type is 'day'" do
+      let(:interval_type) { "day" }
       it "multiplies the interval_number by 86400 (seconds)" do
         assert(subject == 86400)
       end
     end
-    context "when the interval_type is 'weeks'" do
-      let(:interval_type) { "weeks" }
+    context "when the interval_type is 'week'" do
+      let(:interval_type) { "week" }
       it "multiplies the interval_number by 604800 (seconds)" do
         assert(subject == 604800)
       end
     end
-    context "when the interval_type is 'months'" do
-      let(:interval_type) { "months" }
+    context "when the interval_type is 'month'" do
+      let(:interval_type) { "month" }
       it "multiplies the interval_number 2592000 by (seconds)" do
         assert(subject == 2592000)
       end

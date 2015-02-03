@@ -44,8 +44,8 @@ describe TasksController do
   end
 
   describe "POST 'create'" do
-    let(:params) { {name: "Vacuum", interval_number: "1", interval_type: "weeks" } }
-    let(:the_task) { create(:task, name: "Vacuum", interval_number: 1, interval_type: "weeks") }
+    let(:params) { {name: "Vacuum", interval_number: "1", interval_type: "week" } }
+    let(:the_task) { create(:task, name: "Vacuum", interval_number: 1, interval_type: "week") }
     subject { post :create, task: params }
 
     it "checks authorization" do
@@ -66,7 +66,7 @@ describe TasksController do
     end
 
     context "with invalid attributes" do
-      let(:params) { { name: nil, interval_number: "1", interval_type: "weeks" } }
+      let(:params) { { name: nil, interval_number: "1", interval_type: "week" } }
 
       it "does not save the new task in the database" do
         expect { subject }.to_not change(Task, :count)
@@ -108,7 +108,7 @@ describe TasksController do
 
   describe "PATCH 'update'" do
     let(:task) { create(:task, user: user) }
-    let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "months" } }
+    let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month" } }
     subject { patch :update, id: task.id, task: params }
 
     it "checks authorization" do
@@ -139,7 +139,7 @@ describe TasksController do
     end
 
     context "with invalid attributes" do
-      let(:params) { { name: "Check mail", interval_number: nil, interval_type: "months" } }
+      let(:params) { { name: "Check mail", interval_number: nil, interval_type: "month" } }
 
       it "does not update the task in the database" do
         expect { subject }.to_not change(task, :name)

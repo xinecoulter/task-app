@@ -11,6 +11,6 @@ FactoryGirl.define do
       n
     end
     interval 86400
-    interval_type "days"
+    interval_type "day"
   end
 end

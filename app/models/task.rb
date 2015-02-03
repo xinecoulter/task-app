@@ -2,10 +2,12 @@ class Task < ActiveRecord::Base
   belongs_to :user
   belongs_to :task_icon
 
+  INTERVAL_TYPES = %w[day week month]
+
   validates_presence_of :name
   validates_presence_of :interval
   validates_presence_of :interval_number
-  validates_inclusion_of :interval_type, in: %w[days weeks months]
+  validates_inclusion_of :interval_type, in: INTERVAL_TYPES
 
   def self.make(user_id, params)
     task = Task.new(params)
@@ -26,11 +28,11 @@ class Task < ActiveRecord::Base
 
   def self.calculate_interval(interval_number, interval_type)
     case interval_type
-    when "days"
+    when "day"
       seconds_multiplier = 86400 # 1 day (24 hrs * 60 min * 60 sec)
-    when "weeks"
+    when "week"
       seconds_multiplier = 604800 # 1 week (7 days * 24 hrs * 60 min * 60 sec)
-    when "months"
+    when "month"
       seconds_multiplier = 2592000 # 30 days (30 days * 24 hrs * 60 min * 60 sec)
     end
     interval_number * seconds_multiplier
