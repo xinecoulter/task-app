@@ -59,9 +59,9 @@ describe TasksController do
         expect { subject }.to change(Task, :count).by(1)
       end
 
-      it "redirects to the root" do
+      it "redirects to the tasks index" do
         subject
-        assert_redirected_to root_path
+        assert_redirected_to tasks_path
       end
     end
 
@@ -132,9 +132,9 @@ describe TasksController do
         assert_raises(Exception) { subject }
       end
 
-      it "redirects to the root" do
+      it "redirects to the tasks index" do
         subject
-        assert_redirected_to root_path
+        assert_redirected_to tasks_path
       end
     end
 
@@ -166,9 +166,9 @@ describe TasksController do
       expect { subject }.to change(Task, :count).by(-1)
     end
 
-    it "redirects to the root" do
+    it "redirects to the tasks index" do
       subject
-      assert_redirected_to root_path
+      assert_redirected_to tasks_path
     end
   end
 end

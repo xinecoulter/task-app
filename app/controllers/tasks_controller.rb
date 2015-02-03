@@ -15,7 +15,7 @@ class TasksController < ApplicationController
       Task.make(current_user.id, task_params)
     end
     if task.valid?
-      redirect_to root_path
+      redirect_to tasks_path
     else
       render :new
     end
@@ -32,7 +32,7 @@ class TasksController < ApplicationController
       Task.find_and_update(params[:id], task_params)
     end
     if @task.valid?
-      redirect_to root_path
+      redirect_to tasks_path
     else
       render :edit
     end
@@ -43,7 +43,7 @@ class TasksController < ApplicationController
     task = Task.find(id)
     authorize! :destroy, task
     task.destroy!
-    redirect_to root_path
+    redirect_to tasks_path
   end
 
 private
