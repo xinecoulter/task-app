@@ -1,5 +1,5 @@
 <% if @tasks.any? %>
-  <div class="container">
+  <div class="cooldown-graph">
     <% @tasks.each do |task| %>
       <%= content_tag "div", class: "progress-bar", id: "tasks-#{task.id}", data:
           { interval: task.interval, due_date: task.task_due.to_f, task_name: task.name } do %>
@@ -11,24 +11,19 @@
       <% end %>
     <% end %>
   </div>
-  <div class="container">
-    <ul>
-      <% @tasks.each do |task| %>
-        <li>
-          <%= task.name %>
-          <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now } ), method: :put do %>
-            <% if task.task_icon %>
-              <button type="submit"><%= image_tag("task_icons/#{task.task_icon.file_name}") %></button>
-            <% else %>
-              <button type="submit"><%= image_tag("task_icons/default_icon.png") %></button>
-            <% end %>
+  <div class="task-icon-bar">
+    <% @tasks.each do |task| %>
+      <div class="task-icon-button">
+        <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now } ), method: :put do %>
+          <% if task.task_icon %>
+            <button type="submit"><%= image_tag("task_icons/#{task.task_icon.file_name}") %></button>
+          <% else %>
+            <button type="submit"><%= image_tag("task_icons/default_icon.png") %></button>
           <% end %>
-        </li>
-      <% end %>
-    </ul>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% else %>
-  <div class="container">
-    <h1>You don't have any tasks!</h1>
-  </div>
+  <h1>You don't have any tasks!</h1>
 <% end %>

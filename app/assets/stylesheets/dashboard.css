@@ -1,3 +1,20 @@
-.progress-bar {
+.cooldown-graph .progress-bar {
+  height: auto;
   width: 100%;
+}
+
+.cooldown-graph .progress-bar .ui-progressbar-value {
+  height: 1em;
+}
+
+.task-icon-bar {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  background-color: #f5f5f5;
+}
+
+.task-icon-button {
+  display: inline-block;
 }
