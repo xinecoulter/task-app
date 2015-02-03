@@ -1,14 +1,35 @@
-<h1>Your Tasks</h1>
-<%= link_to('Add Task', new_task_path, method: :get) %>
+<div class="page-header">
+  <h1>Your Tasks</h1>
+</div>
+<h4><%= link_to('+ Task', new_task_path, method: :get) %></h4>
 
 <% if @tasks.any? %>
-  <ul>
-    <% @tasks.each do |task| %>
-      <li><%= task.name %>
-      <%= link_to('[Edit]', edit_task_path(task.id), method: :get) %>
-      <%= link_to('[x]', task, method: :delete) %></li>
-    <% end %>
-  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Frequency</th>
+        <th>Last Completed</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tasks.each_with_index do |task, i| %>
+        <tr>
+          <td><%= i + 1 %></td>
+          <td><%= task.name %></td>
+          <td><%= task.description %></td>
+          <td><%= "#{task.interval_number}x / #{task.interval_type}" %></td>
+          <td><%= task.last_completed_at %></td>
+          <td class="task-td-link"><%= link_to('[ edit ]', edit_task_path(task), method: :get) %></td>
+          <td class="task-td-link"><%= link_to('[ x ]', task, method: :delete) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% else %>
   <p>You don't have any tasks!</p>
 <% end %>
