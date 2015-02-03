@@ -17,6 +17,8 @@ class TasksController < ApplicationController
     if task.valid?
       redirect_to tasks_path
     else
+      @task = Task.new(user: current_user)
+      @icons = TaskIcon.all
       render :new
     end
   end
@@ -28,14 +30,17 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task = authorize_with_transaction!(:update) do
+    @task = Task.find(params[:id])
+    task = authorize_with_transaction!(:update) do
       Task.find_and_update(params[:id], task_params)
     end
-    if @task.valid? && params[:task][:redirect_to_dashboard]
-      redirect_to root_path
-    elsif @task.valid?
+    if task.valid? && params[:task][:redirect_to_dashboard]
+      @tasks = current_user.tasks
+      render "dashboard/show"
+    elsif task.valid?
       redirect_to tasks_path
     else
+      @icons = TaskIcon.all
       render :edit
     end
   end

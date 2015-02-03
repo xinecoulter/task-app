@@ -134,9 +134,9 @@ describe TasksController do
 
       context "when param[:task][:redirect_to_dashboard] is true" do
       let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", redirect_to_dashboard: true } }
-        it "redirects to the root path" do
+        it "renders the root path" do
           subject
-          assert_redirected_to root_path
+          expect(response).to render_template "dashboard/show"
         end
       end
 
