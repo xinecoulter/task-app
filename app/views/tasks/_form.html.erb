@@ -1,18 +1,45 @@
-<%= form_for @task do |f| %>
-  <div><%= f.label :name %><br />
-  <%= f.text_field :name, autofocus: true %></div>
-  <div><%= f.label :description %><br />
-  <%= f.text_area :description  %></div>
-  <div><%= f.label :interval %><br />
-  <%= f.select :interval_number, (1..31) %>
-  <%= f.select :interval_type, Task::INTERVAL_TYPES %>
-  </div>
-  <div>
-  <%= f.label "icon" %>
-  <% @icons.each do |icon| %>
-    <%= image_tag("task_icons/#{icon.file_name}") %>
-    <%= f.radio_button :task_icon_id, icon.id %>
+<div class="task-form container-fluid">
+  <%= form_for @task do |f| %>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="input-task-name">Task name</label>
+        <%= f.text_field :name, autofocus: true, class: "form-control", id: "input-task-name", placeholder: "Task name" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="input-task-description">Task description</label>
+        <%= f.text_area :description, class: "form-control", id: "input-task-description", placeholder: "Task description" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label>Time between task completions</label>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <%= f.select :interval_number, (1..31), {}, { class: "form-control" } %>
+          </div>
+          <div class="form-group col-md-6">
+            <%= f.select :interval_type, Task::INTERVAL_TYPES, {}, { class: "form-control" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label>Task icon</label>
+        <div>
+          <% @icons.each do |icon| %>
+            <%= image_tag("task_icons/#{icon.file_name}") %>
+            <%= f.radio_button :task_icon_id, icon.id %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button>
   <% end %>
-  </div>
-  <%= f.submit %>
-<% end %>
+</div>
