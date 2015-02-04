@@ -41,6 +41,7 @@ gem 'spring',        group: :development
 
 gem 'devise'
 gem 'cancancan'
+gem 'draper', '~> 1.3'
 
 group :development, :test do
   gem 'rspec-rails'
