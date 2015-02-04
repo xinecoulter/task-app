@@ -22,7 +22,7 @@
           <td><%= i + 1 %></td>
           <td><%= task.name %></td>
           <td><%= task.description %></td>
-          <td><%= "#{task.interval_number}x / #{task.interval_type}" %></td>
+          <td><%= task.interval_description %></td>
           <td><%= task.last_completed_at %></td>
           <td class="task-td-link"><%= link_to('[ edit ]', edit_task_path(task), method: :get) %></td>
           <td class="task-td-link"><%= link_to('[ x ]', task, method: :delete) %></td>
