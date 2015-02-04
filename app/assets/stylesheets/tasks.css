@@ -1,0 +1,12 @@
+.radio-task-icon {
+  visibility: hidden;
+}
+
+.task-icon-label-and-radio {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.task-td-link {
+  white-space: nowrap;
+}
