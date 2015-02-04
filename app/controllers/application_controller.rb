@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :authenticate_user!
 
+  add_flash_types :error
+
   def authorize_with_transaction!(ability)
     ActiveRecord::Base.transaction do
       object = yield
