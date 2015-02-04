@@ -15,10 +15,12 @@ class TasksController < ApplicationController
       Task.make(current_user.id, task_params)
     end
     if task.valid?
+      flash[:notice] = "Awesomesauce! Task successfully created."
       redirect_to tasks_path
     else
       @task = Task.new(user: current_user)
       @icons = TaskIcon.all
+      flash[:error] = "Do not pass Go. Do not collect $200. JK, change something and try it again."
       render :new
     end
   end
@@ -38,9 +40,11 @@ class TasksController < ApplicationController
       @tasks = current_user.tasks
       render "dashboard/show"
     elsif task.valid?
+      flash[:notice] = "Awesomesauce! Task successfully updated."
       redirect_to tasks_path
     else
       @icons = TaskIcon.all
+      flash[:error] = "Do not pass Go. Do not collect $200. JK, change something and try it again."
       render :edit
     end
   end

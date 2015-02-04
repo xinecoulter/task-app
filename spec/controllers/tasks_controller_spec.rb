@@ -59,6 +59,11 @@ describe TasksController do
         expect { subject }.to change(Task, :count).by(1)
       end
 
+      it "sets the flash" do
+        subject
+        assert("Awesomesauce! Task successfully created." == flash[:notice])
+      end
+
       it "redirects to the tasks index" do
         subject
         assert_redirected_to tasks_path
@@ -70,6 +75,11 @@ describe TasksController do
 
       it "does not save the new task in the database" do
         expect { subject }.to_not change(Task, :count)
+      end
+
+      it "sets the flash" do
+        subject
+        assert("Do not pass Go. Do not collect $200. JK, change something and try it again." == flash[:error])
       end
 
       it "re-renders the :new template" do
@@ -133,7 +143,13 @@ describe TasksController do
       end
 
       context "when param[:task][:redirect_to_dashboard] is true" do
-      let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", redirect_to_dashboard: true } }
+        let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", redirect_to_dashboard: true } }
+
+        it "does not set the flash" do
+          subject
+          assert(flash[:notice].nil?)
+        end
+
         it "renders the root path" do
           subject
           expect(response).to render_template "dashboard/show"
@@ -141,6 +157,11 @@ describe TasksController do
       end
 
       context "when param[:task][:redirect_to_dashboard] is not true" do
+        it "sets the flash" do
+          subject
+          assert("Awesomesauce! Task successfully updated." == flash[:notice])
+        end
+
         it "redirects to the tasks index" do
           subject
           assert_redirected_to tasks_path
@@ -154,6 +175,11 @@ describe TasksController do
       it "does not update the task in the database" do
         expect { subject }.to_not change(task, :name)
         assert("Check mail" != task.reload.name)
+      end
+
+      it "sets the flash" do
+        subject
+        assert("Do not pass Go. Do not collect $200. JK, change something and try it again." == flash[:error])
       end
 
       it "re-renders the :edit template" do
