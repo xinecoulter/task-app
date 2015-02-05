@@ -29,7 +29,7 @@
     </div>
 
     <div class="row">
-      <div class="col-md-12 task-icon-selection">
+      <div class="form-group col-md-12 task-icon-selection">
         <label>Task icon</label>
         <%= content_tag "div", class: "task-icon-selection-container", data: { icon_id: @task.task_icon_id } do %>
           <% @icons.each do |icon| %>
@@ -42,6 +42,10 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn-success">Submit</button>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+    </div>
   <% end %>
 </div>
