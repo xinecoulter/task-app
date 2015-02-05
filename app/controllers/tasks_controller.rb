@@ -54,6 +54,7 @@ class TasksController < ApplicationController
     task = Task.find(id)
     authorize! :destroy, task
     task.destroy!
+    flash[:notice] = "Cool beans. Task successfully deleted."
     redirect_to tasks_path
   end
 

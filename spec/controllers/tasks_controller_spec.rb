@@ -202,6 +202,11 @@ describe TasksController do
       expect { subject }.to change(Task, :count).by(-1)
     end
 
+    it "sets the flash" do
+      subject
+      assert("Cool beans. Task successfully deleted." == flash[:notice])
+    end
+
     it "redirects to the tasks index" do
       subject
       assert_redirected_to tasks_path
