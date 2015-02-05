@@ -29,16 +29,16 @@
     </div>
 
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 task-icon-selection">
         <label>Task icon</label>
-        <div>
+        <%= content_tag "div", class: "task-icon-selection-container", data: { icon_id: @task.task_icon_id } do %>
           <% @icons.each do |icon| %>
             <div class="task-icon-label-and-radio">
               <label for="radio-task-icon-<%= icon.id %>"><%= image_tag("task_icons/#{icon.file_name}") %></label>
               <%= f.radio_button :task_icon_id, icon.id, class: "radio-task-icon", id: "radio-task-icon-#{icon.id}" %>
             </div>
           <% end %>
-        </div>
+        <% end %>
       </div>
     </div>
 

@@ -2,6 +2,11 @@
   visibility: hidden;
 }
 
+.selected-task-icon {
+  border: 1px solid rgb(237, 0, 221);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) inset, 0 0 8px rgba(237, 0, 221, 0.9);
+}
+
 .task-icon-label-and-radio {
   display: inline-block;
   white-space: nowrap;
