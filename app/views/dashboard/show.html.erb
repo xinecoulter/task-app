@@ -2,12 +2,12 @@
   <div class="cooldown-graph">
     <% @tasks.each do |task| %>
       <%= content_tag "div", class: "progress-bar", id: "tasks-#{task.id}", data:
-          { interval: task.interval, due_date: task.task_due.to_f, task_name: task.name } do %>
-          <div class="progress-label">
-            <% if task.ready_for_completion? %>
-              <%= "#{task.name}: DUE NOW!" %>
-            <% end %>
-          </div>
+            { interval: task.interval, due_date: task.task_due.to_f, task_name: task.name } do %>
+        <div class="progress-label">
+          <% if task.ready_for_completion? %>
+            <%= "#{task.name}: DUE NOW!" %>
+          <% end %>
+        </div>
       <% end %>
     <% end %>
   </div>
