@@ -18,3 +18,8 @@
 .task-icon-button {
   display: inline-block;
 }
+
+.task-icon-button button {
+  border: 0;
+}
+
