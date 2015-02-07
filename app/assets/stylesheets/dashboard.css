@@ -17,9 +17,16 @@
 
 .task-icon-button {
   display: inline-block;
+  width: 64px;
 }
 
 .task-icon-button button {
   border: 0;
+  padding: 0 0 0 0;
 }
 
+.task-icon-button p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
