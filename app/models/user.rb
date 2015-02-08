@@ -5,4 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :tasks
+  has_many :team_memberships, foreign_key: :member_id, dependent: :destroy
+  has_many :teams, through: :team_memberships
 end
