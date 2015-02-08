@@ -10,7 +10,7 @@ class Task < ActiveRecord::Base
   validates_inclusion_of :interval_type, in: INTERVAL_TYPES
 
   def self.make(user_id, params)
-    task = Task.new(params)
+    task = new(params)
     task.user_id = user_id
     task.interval = calculate_interval(params[:interval_number].to_i, params[:interval_type])
     task.save

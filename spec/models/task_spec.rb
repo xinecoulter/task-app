@@ -57,7 +57,7 @@ describe Task do
     subject { Task.make(user.id, params) }
 
     it "makes a new task" do
-      expect{subject}.to change(Task, :count).by(1)
+      expect{ subject }.to change(Task, :count).by(1)
     end
 
     it "sends a message to Task.calculate_interval" do
