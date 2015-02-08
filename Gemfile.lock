@@ -109,6 +109,7 @@ GEM
     request_store (1.1.0)
     responders (1.1.1)
       railties (>= 3.2, < 4.2)
+    rolify (3.5.2)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -176,6 +177,7 @@ DEPENDENCIES
   pg
   pry-rails
   rails (= 4.1.4)
+  rolify
   rspec-rails
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
