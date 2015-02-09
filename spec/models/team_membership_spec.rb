@@ -16,4 +16,20 @@ describe TeamMembership do
     duplicate = build(:team_membership, member: user, team: team)
     assert(duplicate.invalid?)
   end
+
+  describe ".make" do
+    subject { TeamMembership.make(user.id, team.id) }
+
+    it "makes a new team_membership with the provided params" do
+      membership = subject
+      assert(membership.class == TeamMembership)
+      assert(membership.persisted?)
+      assert(team == membership.team)
+      assert(user == membership.member)
+    end
+
+    it "saves the new team_membership in the database" do
+      expect { subject }.to change(TeamMembership, :count).by(1)
+    end
+  end
 end
