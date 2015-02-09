@@ -8,4 +8,8 @@ class User < ActiveRecord::Base
   has_many :tasks
   has_many :team_memberships, foreign_key: :member_id, dependent: :destroy
   has_many :teams, through: :team_memberships
+
+  def membership_in(team)
+    team_memberships.find_by_team_id(team.id)
+  end
 end

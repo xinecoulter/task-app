@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe User do
+  let(:user) { create(:user) }
+
   it "can be created" do
     user = build(:user)
     user.save!
@@ -25,5 +27,21 @@ describe User do
     user2 = create(:user, email: "christine2@example.com")
     assert(build(:user, email: "christine@example.com").invalid?)
     expect { user2.update!(email: "christine@example.com") }.to raise_error
+  end
+
+  describe "#membership_in" do
+    let(:team) { create(:team) }
+    subject { user.membership_in(team) }
+    context "when the user has a team_membership in a team" do
+      let!(:team_membership) { create(:team_membership, member: user, team: team) }
+      it "is the team_membership" do
+        assert(team_membership == subject)
+      end
+    end
+    context "when the user has no team_membership in a team" do
+      it "is nil" do
+        assert(subject.nil?)
+      end
+    end
   end
 end
