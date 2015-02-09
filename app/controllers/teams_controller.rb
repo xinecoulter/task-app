@@ -21,6 +21,11 @@ class TeamsController < ApplicationController
     end
   end
 
+  def show
+    @team = Team.find(params[:id])
+    authorize! :read, @team
+  end
+
 private
 
   def team_params

@@ -83,4 +83,22 @@ describe TeamsController do
       end
     end
   end
+
+  describe "GET 'show'" do
+    let(:team) { create(:team) }
+    before { user.add_role :owner, team }
+    subject { get :show, id: team.id }
+
+    it "it assigns the requested team to @team" do
+      subject
+      expect(assigns(:team)).to eq team
+    end
+
+    it "checks authorization" do
+      controller.should_receive(:authorize!).with(:read, team)
+      subject
+    end
+  end
+
+
 end
