@@ -15,12 +15,12 @@ describe User do
     assert(build(:user, email: nil).invalid?)
   end
 
-  # it "must have an email with the correct format" do
-  #   valid = ["thor@thor.thor", "thor.thor@thor.thor", "thor@thor.thor.thor", "thor+thor@thor.thor"]
-    # invalid = ["@loki.loki", "loki@", "loki@loki", "loki@loki,loki", "loki@loki,loki.loki", "loki @loki.loki"]
-    # invalid.each { |e| assert build(:user, email: e).invalid? }
-  #   valid.each   { |e| assert build(:user, email: e).valid? }
-  # end
+  it "must have an email with the correct format" do
+    valid = ["thor@thor.thor", "thor.thor@thor.thor", "thor@thor.thor.thor", "thor+thor@thor.thor"]
+    invalid = ["@loki.loki", "loki@", "loki@loki", "loki@loki,loki", "loki@loki,loki.loki", "loki @loki.loki"]
+    invalid.each { |e| assert build(:user, email: e).invalid? }
+    valid.each   { |e| assert build(:user, email: e).valid? }
+  end
 
   it "cannot have the same email as another user (PG level)" do
     user1 = create(:user, email: "christine@example.com")
