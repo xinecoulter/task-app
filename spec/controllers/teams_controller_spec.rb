@@ -180,4 +180,28 @@ describe TeamsController do
     end
   end
 
+  describe "DELETE 'destroy'" do
+    let!(:team) { create(:team) }
+    before { user.add_role :owner, team }
+    subject { delete :destroy, id: team.id }
+
+    it "checks authorization before deleting the team" do
+      controller.should_receive(:authorize!).with(:destroy, team)
+      subject
+    end
+
+    it "destroys the team" do
+      expect { subject }.to change(Team, :count).by(-1)
+    end
+
+    it "sets the flash" do
+      subject
+      assert("Cool beans. Team successfully deleted." == flash[:notice])
+    end
+
+    it "redirects to the teams index" do
+      subject
+      assert_redirected_to teams_path
+    end
+  end
 end

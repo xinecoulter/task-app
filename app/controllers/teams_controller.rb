@@ -45,6 +45,15 @@ class TeamsController < ApplicationController
     end
   end
 
+  def destroy
+    id = params[:id]
+    team = Team.find(id)
+    authorize! :destroy, team
+    team.destroy!
+    flash[:notice] = "Cool beans. Team successfully deleted."
+    redirect_to teams_path
+  end
+
 private
 
   def team_params
