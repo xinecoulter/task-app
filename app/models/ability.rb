@@ -8,13 +8,25 @@ class Ability
   end
 
   def user_permissions
+    anyone_can [:create] => [Team]
+
     owner_can [:create,
                :update,
                :destroy] => { Task => :user_id }
+
+    can_with_owner_role [:manage]  => [Team]
+  end
+
+  def anyone_can(permissions)
+    grant(permissions) { |action, thing| can action, thing }
   end
 
   def owner_can(permissions)
     grant(permissions) { |action, thing, key| can action, thing, key => @user.id }
+  end
+
+  def can_with_owner_role(permissions)
+    grant_with_block(permissions) { |obj| @user.has_role? :owner, obj }
   end
 
   def grant(permissions)
@@ -22,6 +34,12 @@ class Ability
       things.each do |thing|
         actions.each { |action| yield action, *thing }
       end
+    end
+  end
+
+  def grant_with_block(permissions)
+    grant(permissions) do |action, thing|
+      can(action, thing) { |obj| yield obj }
     end
   end
 

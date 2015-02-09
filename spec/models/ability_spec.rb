@@ -26,4 +26,20 @@ describe Ability do
       expect(ability).to_not be_able_to(:destroy, task)
     end
   end
+
+  describe "teams" do
+    it "can create a team" do
+      team = build(:team)
+      expect(ability).to be_able_to(:create, team)
+    end
+    it "can manage a team it owns" do
+      team = build(:team)
+      user.add_role :owner, team
+      expect(ability).to be_able_to(:manage, team)
+    end
+    it "can't manage a team it doesn't own" do
+      team = build(:team)
+      expect(ability).to_not be_able_to(:manage, team)
+    end
+  end
 end
