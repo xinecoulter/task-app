@@ -33,4 +33,16 @@ describe Team do
       assert(user.has_role? :owner, team)
     end
   end
+
+  describe ".find_and_update" do
+    let!(:team) { create(:team, name: "Armed and Hammered") }
+    let(:name) { "Weapons of Mass Seduction" }
+    let(:params) { { name: name } }
+    subject { Team.find_and_update(team.id, params) }
+
+    it "finds and updates the team" do
+      expect { subject }.to_not change(Team, :count)
+      assert(subject.name = name)
+    end
+  end
 end

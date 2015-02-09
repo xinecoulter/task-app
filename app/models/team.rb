@@ -12,4 +12,10 @@ class Team < ActiveRecord::Base
     owner.add_role :owner, team
     team
   end
+
+  def self.find_and_update(id, params)
+    team = find(id)
+    team.update(params)
+    team
+  end
 end
