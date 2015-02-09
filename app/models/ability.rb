@@ -15,6 +15,14 @@ class Ability
                :destroy] => { Task => :user_id }
 
     can_with_owner_role [:manage]  => [Team]
+
+    team_permissions
+  end
+
+  def team_permissions
+    can [:read], Team do |team|
+      @user.membership_in(team)
+    end
   end
 
   def anyone_can(permissions)

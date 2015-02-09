@@ -41,5 +41,14 @@ describe Ability do
       team = build(:team)
       expect(ability).to_not be_able_to(:manage, team)
     end
+    it "can read a team it is a member of" do
+      team = create(:team)
+      team.members << user
+      expect(ability).to be_able_to(:read, team)
+    end
+    it "cannot read a team it is not a member of" do
+      team = create(:team)
+      expect(ability).to_not be_able_to(:read, team)
+    end
   end
 end
