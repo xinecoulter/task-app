@@ -26,6 +26,25 @@ class TeamsController < ApplicationController
     authorize! :read, @team
   end
 
+  def edit
+    @team = Team.find(params[:id])
+    authorize! :update, @team
+  end
+
+  def update
+    @team = Team.find(params[:id])
+    team = authorize_with_transaction!(:update) do
+      Team.find_and_update(params[:id], team_params)
+    end
+    if team.valid?
+      flash[:notice] = "Awesomesauce! Team successfully updated."
+      redirect_to team_path(team)
+    else
+      flash[:error] = "Do not pass Go. Do not collect $200. JK, change something and try it again."
+      render :edit
+    end
+  end
+
 private
 
   def team_params

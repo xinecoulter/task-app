@@ -100,5 +100,84 @@ describe TeamsController do
     end
   end
 
+  describe "GET 'edit'" do
+    let(:team) { create(:team) }
+    before { user.add_role :owner, team }
+    subject { get :edit, id: team.id }
+
+    it "finds the team" do
+      subject
+      assert(team == assigns(:team))
+    end
+
+    it "checks authorization" do
+      controller.should_receive(:authorize!).with(:update, team)
+      subject
+    end
+
+    it "renders the :edit template" do
+      subject
+      expect(response).to render_template :edit
+    end
+  end
+
+  describe "PATCH 'update'" do
+    let(:team) { create(:team, name: "Team Rocket") }
+    let(:name) { "Brotherhood of Evil Mutants" }
+    let(:params) { { name: name } }
+    before { user.add_role :owner, team }
+    subject { patch :update, id: team.id, team: params }
+
+    it "stores the requested team" do
+      subject
+      assert(team == assigns(:team))
+    end
+
+    it "checks authorization" do
+      controller.should_receive(:authorize!).with(:update, team)
+      subject
+    end
+
+    context "with valid attributes" do
+      it "updates the task in the database" do
+        subject
+        expect(team.reload.name).to eq(name)
+      end
+
+      it "raises an exception when the update is unsuccessful" do
+        Team.stub(:find_and_update).and_raise(Exception)
+        assert_raises(Exception) { subject }
+      end
+
+      it "sets the flash" do
+        subject
+        assert("Awesomesauce! Team successfully updated." == flash[:notice])
+      end
+
+      it "redirects to the team" do
+        subject
+        assert_redirected_to team_path(team)
+      end
+    end
+
+    context "with invalid attributes" do
+      let(:params) { { name: "" } }
+
+      it "does not update the team in the database" do
+        expect { subject }.to_not change(team, :name)
+        assert("Team Rocket" == team.reload.name)
+      end
+
+      it "sets the flash" do
+        subject
+        assert("Do not pass Go. Do not collect $200. JK, change something and try it again." == flash[:error])
+      end
+
+      it "re-renders the :edit template" do
+        subject
+        expect(response).to render_template :edit
+      end
+    end
+  end
 
 end
