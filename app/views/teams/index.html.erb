@@ -1,0 +1,12 @@
+<div class="page-header">
+  <h1>Teams</h1>
+</div>
+<% if @teams %>
+  <ul>
+    <% @teams.each do |team| %>
+      <li><%= link_to team.name, team_path(team) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You don't have any teams</p>
+<% end %>
