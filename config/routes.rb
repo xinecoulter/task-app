@@ -13,5 +13,7 @@ Rails.application.routes.draw do
 
   resources :tasks, except: :show
 
-  resources :teams
+  resources :teams do
+    resources :members, only: [:create, :destroy]
+  end
 end
