@@ -7,4 +7,12 @@ class MembersController < ApplicationController
     redirect_to teams_path
   end
 
+  def destroy
+    team = Team.find(params[:team_id])
+    membership = TeamMembership.find(params[:id])
+    membership.destroy!
+
+    flash[:notice] = "Aww. Successfully left Team #{team.name}."
+    redirect_to teams_path
+  end
 end

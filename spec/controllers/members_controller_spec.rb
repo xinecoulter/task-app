@@ -32,4 +32,29 @@ describe MembersController do
     end
   end
 
+  describe "DELETE 'destroy'" do
+    let!(:membership) { create(:team_membership, team: team, member: user) }
+    subject { delete :destroy, team_id: team.id, id: membership.id }
+
+    it "removes the user as a member of the team" do
+      assert(team.members.include? user)
+      subject
+      assert(!team.members.include?(user))
+    end
+
+    it "deletes the team_membership from the database" do
+      expect{ subject }.to change(TeamMembership, :count).by(-1)
+    end
+
+    it "sets the flash" do
+      subject
+      assert("Aww. Successfully left Team #{team.name}." == flash[:notice])
+    end
+
+    it "redirects to the team index" do
+      subject
+      assert_redirected_to teams_path
+    end
+  end
+
 end
