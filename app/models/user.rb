@@ -12,4 +12,8 @@ class User < ActiveRecord::Base
   def membership_in(team)
     team_memberships.find_by_team_id(team.id)
   end
+
+  def membership_id(team)
+    membership_in(team).try(:id)
+  end
 end

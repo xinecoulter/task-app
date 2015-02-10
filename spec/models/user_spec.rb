@@ -44,4 +44,23 @@ describe User do
       end
     end
   end
+
+  describe "#membership_id" do
+    let(:team) { create(:team) }
+    subject { user.membership_id(team) }
+
+    context "when the user has a team_membership in a team" do
+      let!(:membership) { create(:team_membership, member: user, team: team) }
+
+      it "is the id of the team_membership" do
+        assert(membership.id == subject)
+      end
+    end
+
+    context "when the user has no team_membership in a team" do
+      it "is nil" do
+        assert(subject.nil?)
+      end
+    end
+  end
 end
