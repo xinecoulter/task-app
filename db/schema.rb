@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150208074341) do
+ActiveRecord::Schema.define(version: 20150210070533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,11 +46,20 @@ ActiveRecord::Schema.define(version: 20150208074341) do
     t.integer  "task_icon_id"
   end
 
+  create_table "team_membership_invitations", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "invited_user_id"
+    t.integer  "team_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "team_memberships", force: true do |t|
     t.integer  "team_id"
     t.integer  "member_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "team_membership_invitation_id"
   end
 
   create_table "teams", force: true do |t|
