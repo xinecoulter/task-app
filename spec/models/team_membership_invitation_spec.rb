@@ -17,4 +17,21 @@ describe TeamMembershipInvitation do
     duplicate = build(:team_membership_invitation, invited_user: invited_user, user: user, team: team)
     assert(duplicate.invalid?)
   end
+
+  describe ".make" do
+    subject { TeamMembershipInvitation.make(user, invited_user, team) }
+
+    it "creates a team_membership_invitation" do
+      expect{ subject }.to change(TeamMembershipInvitation, :count).by(1)
+    end
+
+    it "gives the team_membership_invitation the specified attributes" do
+      invitation = subject
+      assert(invitation.class == TeamMembershipInvitation)
+      assert(invitation.persisted?)
+      assert(team == invitation.team)
+      assert(user == invitation.user)
+      assert(invited_user == invitation.invited_user)
+    end
+  end
 end

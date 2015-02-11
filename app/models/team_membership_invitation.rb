@@ -5,4 +5,9 @@ class TeamMembershipInvitation < ActiveRecord::Base
   has_one :team_membership
 
   validates_uniqueness_of :invited_user_id, scope: [:user_id, :team_id]
+
+  def self.make(user, invited_user, team)
+    invitation = TeamMembershipInvitation.create(user: user, invited_user: invited_user, team: team)
+    invitation
+  end
 end
