@@ -20,9 +20,11 @@
             <td><%= i + 1 %></td>
             <td><%= link_to team.name, team_path(team) %></td>
             <% if Ability.new(current_user).can?(:manage, team) %>
+              <td><%= link_to('Invite User', team_team_membership_invitations_path(team), method: :get, class: "btn btn-success") %></td>
               <td><%= link_to('Edit', edit_team_path(team), method: :get, class: "btn btn-warning") %></td>
               <td><%= link_to('Delete', team, method: :delete, class: "btn btn-danger") %></td>
             <% else %>
+              <td></td>
               <td></td>
               <td>
                 <%= form_tag team_member_path(team_id: team.id, id: current_user.membership_id(team)), method: :delete do %>
@@ -34,6 +36,7 @@
         <% end %>
       </tbody>
     </table>
+  </div>
 <% else %>
   <p>You don't have any teams!</p>
 <% end %>
