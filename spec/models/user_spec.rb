@@ -74,4 +74,25 @@ describe User do
       assert([invitation] == subject)
     end
   end
+
+  describe "#team_membership_invitation_from" do
+    let(:other_user) { create(:user) }
+    let(:team) { create(:team) }
+    subject { user.team_membership_invitation_from(team) }
+
+    context "when the user is the invited_user of a team_membership_invitation from a given team" do
+      let!(:invitation) { create(:team_membership_invitation, user: other_user, invited_user: user, team: team) }
+
+      it "returns the team_membership_invitation" do
+        assert(invitation == subject)
+      end
+    end
+
+    context "when the user does not have a team_membership_invitation from a given team" do
+      it "is nil" do
+        assert(subject.nil?)
+      end
+    end
+  end
+
 end

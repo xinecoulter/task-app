@@ -25,4 +25,8 @@ class User < ActiveRecord::Base
     outgoing_team_membership_invitations.where(team_id: team.id)
   end
 
+  def team_membership_invitation_from(team)
+    incoming_team_membership_invitations.find_by_team_id(team.id)
+  end
+
 end
