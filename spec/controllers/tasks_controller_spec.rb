@@ -44,7 +44,7 @@ describe TasksController do
   end
 
   describe "POST 'create'" do
-    let(:params) { {name: "Vacuum", interval_number: "1", interval_type: "week" } }
+    let(:params) { { name: "Vacuum", interval_number: "1", interval_type: "week" } }
     let(:the_task) { create(:task, name: "Vacuum", interval_number: 1, interval_type: "week") }
     subject { post :create, task: params }
 
