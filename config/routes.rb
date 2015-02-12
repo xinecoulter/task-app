@@ -15,5 +15,6 @@ Rails.application.routes.draw do
 
   resources :teams do
     resources :members, only: [:create, :destroy]
+    resources :team_membership_invitations, only: [:index, :create, :destroy]
   end
 end
