@@ -1,0 +1,50 @@
+<div class="page-header">
+  <h1><%= "Invite to Team #{@team.name}" %></h1>
+</div>
+
+<div class="task-form container-fluid">
+  <%= form_for [@team, @team_membership_invitation] do |f| %>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="input-invited-user-email">Invite by user email</label>
+        <%= f.text_field :invited_user_email, autofocus: true, class: "form-control", id: "input-invited-user-email", placeholder: "Email" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-12">
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @invitations.any? %>
+  <div class="page-header">
+    <h1>Pending Invitations</h1>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>User</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invitations.each_with_index do |invitation, i| %>
+          <tr>
+            <td><%= i + 1 %></td>
+            <td><%= invitation.invited_user.email %></td>
+            <td>
+              <%= form_tag team_team_membership_invitation_path(team_id: @team.id, id: invitation.id), method: :delete do %>
+                <button type="submit" class="btn btn-danger">Uninvite</button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
