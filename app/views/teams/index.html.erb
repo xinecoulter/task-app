@@ -24,7 +24,11 @@
               <td><%= link_to('Delete', team, method: :delete, class: "btn btn-danger") %></td>
             <% else %>
               <td></td>
-              <td></td>
+              <td>
+                <%= form_tag team_member_path(team_id: team.id, id: current_user.membership_id(team)), method: :delete do %>
+                  <button type="submit" class="btn btn-danger">Leave</button>
+                <% end %>
+              </td>
             <% end %>
           </tr>
         <% end %>
