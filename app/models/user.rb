@@ -20,4 +20,9 @@ class User < ActiveRecord::Base
   def membership_id(team)
     membership_in(team).try(:id)
   end
+
+  def team_membership_invitations_to(team)
+    outgoing_team_membership_invitations.where(team_id: team.id)
+  end
+
 end

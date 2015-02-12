@@ -63,4 +63,15 @@ describe User do
       end
     end
   end
+
+  describe "#team_membership_invitations_to" do
+    let(:other_user) { create(:user) }
+    let(:team) { create(:team) }
+    let!(:invitation) { create(:team_membership_invitation, user: user, invited_user: other_user, team: team) }
+    subject { user.team_membership_invitations_to(team) }
+
+    it "returns the user's outgoing_team_membership_invitations to a team" do
+      assert([invitation] == subject)
+    end
+  end
 end
