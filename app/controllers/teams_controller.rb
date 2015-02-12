@@ -1,6 +1,7 @@
 class TeamsController < ApplicationController
   def index
     @teams = current_user.teams
+    @invitations = current_user.incoming_team_membership_invitations
   end
 
   def new

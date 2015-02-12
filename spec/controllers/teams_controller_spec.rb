@@ -9,15 +9,28 @@ describe TeamsController do
   describe "GET 'index'" do
     let(:team1) { create(:team) }
     let(:team2) { create(:team) }
+    let(:team3) { create(:team) }
+    let(:other_user) { create(:user) }
     before do
       team1.members << user
       team2.members << user
+      TeamMembershipInvitation.make(other_user, user, team3)
     end
     subject { get :index }
 
     it "assigns the user's teams to @teams" do
       subject
       assert(user.teams == assigns[:teams])
+    end
+
+    it "assigns the user's incoming_team_membership_invitations to @invitations" do
+      subject
+      assert(user.incoming_team_membership_invitations == assigns[:invitations])
+    end
+
+    it "renders the :index template" do
+      subject
+      expect(response).to render_template :index
     end
   end
 
