@@ -8,9 +8,9 @@ class Team < ActiveRecord::Base
   resourcify
 
   def self.make(owner, params)
-    team = new(params)
-    team.save
+    team = create(params)
     owner.add_role :owner, team
+    TeamMembership.make(owner.id, team.id)
     team
   end
 

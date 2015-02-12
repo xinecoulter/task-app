@@ -32,6 +32,11 @@ describe Team do
       team = subject
       assert(user.has_role? :owner, team)
     end
+
+    it "makes the user a member of the team" do
+      team = subject
+      assert(team.members.include? user)
+    end
   end
 
   describe ".find_and_update" do
