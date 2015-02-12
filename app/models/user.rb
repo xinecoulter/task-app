@@ -29,4 +29,8 @@ class User < ActiveRecord::Base
     incoming_team_membership_invitations.find_by_team_id(team.id)
   end
 
+  def invited_to?(team)
+    !!team_membership_invitation_from(team)
+  end
+
 end

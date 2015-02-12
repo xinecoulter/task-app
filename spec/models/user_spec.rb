@@ -95,4 +95,19 @@ describe User do
     end
   end
 
+  describe "#invited_to?" do
+    let(:other_user) { create(:user) }
+    let(:team) { create(:team) }
+    subject { user.invited_to?(team) }
+
+    context "when the user is the invited_user of a team_membership_invitation from a given team" do
+      let!(:invitation) { create(:team_membership_invitation, user: other_user, invited_user: user, team: team) }
+
+      it { should be_truthy }
+    end
+
+    context "when the user does not have a team_membership_invitation from a given team" do
+      it { should be_falsey }
+    end
+  end
 end
