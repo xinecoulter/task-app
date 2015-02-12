@@ -12,6 +12,7 @@
           <th>Name</th>
           <th></th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -39,4 +40,34 @@
   </div>
 <% else %>
   <p>You don't have any teams!</p>
+<% end %>
+
+<% if @invitations.any? %>
+  <div class="page-header">
+    <h1>Team Invitations</h1>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Team</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invitations.each_with_index do |invitation, i| %>
+          <tr>
+            <td><%= i + 1 %></td>
+            <td><%= invitation.team.name %></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% end %>
