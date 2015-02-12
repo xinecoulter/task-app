@@ -23,6 +23,9 @@ class Ability
     can [:read], Team do |team|
       @user.membership_in(team)
     end
+    can [:create, :destroy], TeamMembershipInvitation do |invite|
+      @user.has_role? :owner, invite.team
+    end
   end
 
   def anyone_can(permissions)

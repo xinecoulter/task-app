@@ -51,4 +51,25 @@ describe Ability do
       expect(ability).to_not be_able_to(:read, team)
     end
   end
+
+  describe "team_membership_invitations" do
+    it "can create a team_membership_invitation to a team it owns" do
+      invitation = build(:team_membership_invitation)
+      user.add_role :owner, invitation.team
+      expect(ability).to be_able_to(:create, invitation)
+    end
+    it "can destroy a team_membership_invitation to a team it owns" do
+      invitation = build(:team_membership_invitation)
+      user.add_role :owner, invitation.team
+      expect(ability).to be_able_to(:destroy, invitation)
+    end
+    it "cannot create a team_membership_invitation to a team it owns" do
+      invitation = build(:team_membership_invitation)
+      expect(ability).to_not be_able_to(:create, invitation)
+    end
+    it "cannot destroy a team_membership_invitation to a team it owns" do
+      invitation = build(:team_membership_invitation)
+      expect(ability).to_not be_able_to(:destroy, invitation)
+    end
+  end
 end
