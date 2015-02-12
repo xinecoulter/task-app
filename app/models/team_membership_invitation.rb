@@ -4,6 +4,7 @@ class TeamMembershipInvitation < ActiveRecord::Base
   belongs_to :team
   has_one :team_membership
 
+  validates_presence_of :invited_user_id
   validates_uniqueness_of :invited_user_id, scope: [:user_id, :team_id]
 
   attr_accessor :invited_user_email
