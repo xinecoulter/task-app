@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :tasks
+  has_many :tasks, dependent: :destroy
   has_many :team_memberships, foreign_key: :member_id, dependent: :destroy
   has_many :teams, through: :team_memberships
   has_many :outgoing_team_membership_invitations, class_name: "TeamMembershipInvitation",
