@@ -13,8 +13,16 @@ describe TeamMembershipInvitation do
   end
 
   it "must have invited_user" do
-    team = build(:team_membership_invitation, invited_user: nil, user: user, team: team)
-    expect { team.save! }.to raise_error
+    invitation = build(:team_membership_invitation, invited_user: nil, user: user, team: team)
+    expect { invitation.save! }.to raise_error
+  end
+
+  it "must have invited_user who is not already a member of the team" do
+    team.members << invited_user
+    invitation = build(:team_membership_invitation, invited_user: invited_user, user: user, team: team)
+    expect { invitation.save! }.to raise_error
+    assert(invitation.invalid?)
+    assert(["is already a member"] == invitation.errors.messages[:invited_user_id])
   end
 
   it "is unique for a given invited_user, user, and team" do
