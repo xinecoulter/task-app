@@ -9,7 +9,15 @@ describe MembersController do
 
   describe "POST 'create'" do
     let(:params) { { member_id: user.id } }
+    let(:the_membership) { create(:team_membership, member: user, team: team) }
+    before { create(:team_membership_invitation, invited_user: user, team: team) }
     subject { post :create, team_id: team.id, member: params }
+
+    it "checks authorization" do
+      TeamMembership.stub(:make) { the_membership }
+      controller.should_receive(:authorize!).with(:create, the_membership)
+      subject
+    end
 
     it "sets the flash" do
       subject
@@ -35,6 +43,11 @@ describe MembersController do
   describe "DELETE 'destroy'" do
     let!(:membership) { create(:team_membership, team: team, member: user) }
     subject { delete :destroy, team_id: team.id, id: membership.id }
+
+    it "checks authorization" do
+      controller.should_receive(:authorize!).with(:destroy, membership)
+      subject
+    end
 
     it "removes the user as a member of the team" do
       assert(team.members.include? user)
