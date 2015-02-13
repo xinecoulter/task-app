@@ -63,13 +63,41 @@ describe Ability do
       user.add_role :owner, invitation.team
       expect(ability).to be_able_to(:destroy, invitation)
     end
-    it "cannot create a team_membership_invitation to a team it owns" do
+    it "cannot create a team_membership_invitation to a team it does not own" do
       invitation = build(:team_membership_invitation)
       expect(ability).to_not be_able_to(:create, invitation)
     end
-    it "cannot destroy a team_membership_invitation to a team it owns" do
+    it "cannot destroy a team_membership_invitation to a team it does not own" do
       invitation = build(:team_membership_invitation)
       expect(ability).to_not be_able_to(:destroy, invitation)
+    end
+  end
+
+  describe "team_memberships" do
+    it "can create a team_membership to a team if it is the invited_user of a team_membership_invitation to the team" do
+      team = create(:team)
+      invitation = create(:team_membership_invitation, invited_user: user, team: team)
+      membership = build(:team_membership, member: user, team: team)
+      expect(ability).to be_able_to(:create, membership)
+    end
+    it "cannot create a team_membership to a team if it is not the invited_user of a team_membership_invitation to the team" do
+      team = create(:team)
+      membership = build(:team_membership, member: user, team: team)
+      expect(ability).to_not be_able_to(:create, membership)
+    end
+    it "can destroy a team_membership if it is the member of the team_membership" do
+      membership = create(:team_membership, member: user)
+      expect(ability).to be_able_to(:destroy, membership)
+    end
+    it "cannot destroy a team_membership it is not the member of the team_membership" do
+      membership = create(:team_membership)
+      expect(ability).to_not be_able_to(:destroy, membership)
+    end
+    it "cannot destroy a team_membership if it the owner of the team" do
+      team = create(:team)
+      user.add_role(:owner, team)
+      membership = create(:team_membership, member: user, team: team)
+      expect(ability).to_not be_able_to(:destroy, membership)
     end
   end
 end

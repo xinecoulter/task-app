@@ -12,7 +12,8 @@ class Ability
 
     owner_can [:create,
                :update,
-               :destroy] => { Task => :user_id }
+               :destroy] => { Task => :user_id },
+              [:destroy] => { TeamMembership => :member_id }
 
     can_with_owner_role [:manage]  => [Team]
 
@@ -25,6 +26,12 @@ class Ability
     end
     can [:create, :destroy], TeamMembershipInvitation do |invite|
       @user.has_role? :owner, invite.team
+    end
+    can [:create], TeamMembership do |membership|
+      @user.invited_to?(membership.team)
+    end
+    cannot [:destroy], TeamMembership do |membership|
+      @user.has_role?(:owner, membership.team)
     end
   end
 
