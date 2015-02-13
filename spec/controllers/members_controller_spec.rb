@@ -19,11 +19,6 @@ describe MembersController do
       subject
     end
 
-    it "sets the flash" do
-      subject
-      assert("Challenge accepted! You successfully joined Team #{team.name}." == flash[:notice])
-    end
-
     it "makes the user a member of the team" do
       assert(!team.members.include?(user))
       subject
@@ -37,6 +32,28 @@ describe MembersController do
     it "redirects to the referring page" do
       subject
       assert_redirected_to teams_path
+    end
+
+    context "when the team_membership is valid" do
+      it "destroys all team_membership_invitations the user has from the team" do
+        assert(!user.team_membership_invitation_from(team).nil?)
+        subject
+        assert(user.team_membership_invitation_from(team).nil?)
+      end
+
+      it "sets the flash" do
+        subject
+        assert("Challenge accepted! You successfully joined Team #{team.name}." == flash[:notice])
+      end
+    end
+
+    context "when the team_membership is not valid" do
+      before { TeamMembership.any_instance.stub(:valid?) { false } }
+
+      it "sets the flash" do
+        subject
+        assert("Oh dear. Something went wrong. How embarrassing." == flash[:error])
+      end
     end
   end
 
