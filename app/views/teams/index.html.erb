@@ -62,9 +62,13 @@
           <tr>
             <td><%= i + 1 %></td>
             <td><%= invitation.team.name %></td>
+            <td><%= link_to('Join', team_members_path(invitation.team), method: :post, class: "btn btn-success") %></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>
+              <%= form_tag team_team_membership_invitation_path(team_id: invitation.team.id, id: invitation.id), method: :delete do %>
+                <button type="submit" class="btn btn-danger">Ignore</button>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
