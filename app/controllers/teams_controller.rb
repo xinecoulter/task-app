@@ -24,6 +24,8 @@ class TeamsController < ApplicationController
 
   def show
     @team = Team.find(params[:id])
+    @member_1 = @team.members[0]
+    @member_2 = @team.members[1]
     authorize! :read, @team
   end
 

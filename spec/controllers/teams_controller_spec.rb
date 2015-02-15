@@ -99,12 +99,27 @@ describe TeamsController do
 
   describe "GET 'show'" do
     let(:team) { create(:team) }
-    before { user.add_role :owner, team }
+    let(:user2) { create(:user) }
+    before do
+      user.add_role :owner, team
+      team.members << user
+      team.members << user2
+    end
     subject { get :show, id: team.id }
 
-    it "it assigns the requested team to @team" do
+    it "assigns the requested team to @team" do
       subject
-      expect(assigns(:team)).to eq team
+      assert(team == assigns(:team))
+    end
+
+    it "assigns the first team member to @member_1" do
+      subject
+      assert(user == assigns(:member_1))
+    end
+
+    it "assigns the second team member to @member_2" do
+      subject
+      assert(user2 == assigns(:member_2))
     end
 
     it "checks authorization" do
