@@ -16,11 +16,13 @@
       <div class="task-icon-button">
         <p><%= task.name %></p>
         <%= form_tag task_path(id: task.id, task: { last_completed_at: DateTime.now, redirect_to_dashboard: true } ), method: :put do %>
-          <% if task.task_icon %>
-            <button type="submit"><%= image_tag("task_icons/#{task.task_icon.file_name}") %></button>
-          <% else %>
-            <button type="submit"><%= image_tag("task_icons/default_icon.png") %></button>
-          <% end %>
+          <button type="submit">
+            <% if task.task_icon %>
+              <%= image_tag("task_icons/#{task.task_icon.file_name}") %>
+            <% else %>
+              <%= image_tag("task_icons/default_icon.png") %>
+            <% end %>
+          </button>
         <% end %>
       </div>
     <% end %>
