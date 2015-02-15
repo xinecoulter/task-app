@@ -9,6 +9,8 @@ class Task < ActiveRecord::Base
   validates_presence_of :interval_number
   validates_inclusion_of :interval_type, in: INTERVAL_TYPES
 
+  default_scope { order("created_at ASC") }
+
   def self.make(user_id, params)
     task = new(params)
     task.user_id = user_id

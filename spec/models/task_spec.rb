@@ -45,6 +45,16 @@ describe Task do
     assert(build(:task, interval_type: "year").invalid?)
   end
 
+  describe "default scope" do
+    let!(:task1) { create(:task, created_at: 5.days.ago) }
+    let!(:task2) { create(:task, created_at: 2.days.from_now) }
+    let!(:task3) { create(:task, created_at: Date.today) }
+
+    it "orders by created_at in ascending order" do
+      assert([task1, task3, task2] == Task.all)
+    end
+  end
+
   describe ".make" do
     let(:user) { create(:user) }
     let(:name) { "Laundry" }
