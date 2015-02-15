@@ -1,0 +1,13 @@
+.battlemode-container {
+  position: relative;
+}
+
+.battlemode-content {
+  height: 80.5555556%;
+}
+
+.battlemode-content .col-md-6,
+.row
+{
+  height: 100%;
+}
