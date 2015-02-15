@@ -5,6 +5,8 @@ class Team < ActiveRecord::Base
 
   validates_presence_of :name
 
+  default_scope { order("created_at ASC") }
+
   resourcify
 
   def self.make(owner, params)

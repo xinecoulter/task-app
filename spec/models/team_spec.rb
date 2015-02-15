@@ -13,6 +13,16 @@ describe Team do
     expect { team.save! }.to raise_error
   end
 
+  describe "default scope" do
+    let!(:team1) { create(:team, created_at: 5.days.ago) }
+    let!(:team2) { create(:team, created_at: 2.days.from_now) }
+    let!(:team3) { create(:team, created_at: Date.today) }
+
+    it "orders by created_at in ascending order" do
+      assert([team1, team3, team2] == Team.all)
+    end
+  end
+
   describe ".make" do
     let(:user) { create(:user) }
     let(:name) { "Big Hero 6" }
