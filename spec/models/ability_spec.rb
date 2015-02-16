@@ -12,10 +12,25 @@ describe Ability do
       expect(ability).to be_able_to(:create, task)
       expect(ability).to be_able_to(:update, task)
     end
-    it "cannot create or update a task it does not own" do
+    it "can update the task of a user who is a teammate" do
+      team = create(:team)
       task = build(:task, user: other_user)
-      expect(ability).to_not be_able_to(:create, task)
+      team.members << user << other_user
+      expect(ability).to be_able_to(:update, task)
+    end
+    it "cannot update the task of a user who is not a teammate" do
+      team = create(:team)
+      task = build(:task, user: other_user)
+      team.members << user
       expect(ability).to_not be_able_to(:update, task)
+    end
+    it "can view_edit a task it owns" do
+      task = build(:task, user: user)
+      expect(ability).to be_able_to(:view_edit, task)
+    end
+    it "cannot view_edit a task it does not own" do
+      task = build(:task, user: other_user)
+      expect(ability).to_not be_able_to(:view_edit, task)
     end
     it "can destroy a task it owns" do
       task = build(:task, user: user)
