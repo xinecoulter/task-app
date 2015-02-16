@@ -11,7 +11,7 @@
       <% end %>
     <% end %>
   </div>
-  <%= render partial: "tasks/taskbar", locals: { tasks: @tasks } %>
+  <%= render partial: "tasks/taskbar", locals: { tasks: @tasks, redirection: "dashboard", team_id: nil } %>
 <% else %>
   <h1>You don't have any tasks!</h1>
 <% end %>
