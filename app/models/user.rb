@@ -33,4 +33,8 @@ class User < ActiveRecord::Base
     !!team_membership_invitation_from(team)
   end
 
+  def teammates_with?(user)
+    teams.with_member(user.id).present?
+  end
+
 end

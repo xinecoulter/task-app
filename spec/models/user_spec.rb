@@ -110,4 +110,21 @@ describe User do
       it { should be_falsey }
     end
   end
+
+  describe "#teammates_with?" do
+    let(:other_user) { create(:user) }
+    let(:team) { create(:team) }
+    before { team.members << user }
+    subject { user.teammates_with?(other_user) }
+
+    context "when the user is the member of a team that has the specified user as a member" do
+      before { team.members << other_user }
+
+      it { should be_truthy }
+    end
+
+    context "when the user is not a member of a team that has the specified user as a member" do
+      it { should be_falsey }
+    end
+  end
 end
