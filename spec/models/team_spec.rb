@@ -13,13 +13,33 @@ describe Team do
     expect { team.save! }.to raise_error
   end
 
-  describe "default scope" do
-    let!(:team1) { create(:team, created_at: 5.days.ago) }
-    let!(:team2) { create(:team, created_at: 2.days.from_now) }
-    let!(:team3) { create(:team, created_at: Date.today) }
+  describe "scope methods" do
+    describe "default scope" do
+      let!(:team1) { create(:team, created_at: 5.days.ago) }
+      let!(:team2) { create(:team, created_at: 2.days.from_now) }
+      let!(:team3) { create(:team, created_at: Date.today) }
 
-    it "orders by created_at in ascending order" do
-      assert([team1, team3, team2] == Team.all)
+      it "orders by created_at in ascending order" do
+        assert([team1, team3, team2] == Team.all)
+      end
+    end
+
+    describe ".with_member" do
+      let!(:team1) { create(:team) }
+      let!(:team2) { create(:team) }
+      let!(:team3) { create(:team) }
+      let(:user) { create(:user) }
+      before do
+        team1.members << user
+        team3.members << user
+      end
+      subject { Team.with_member(user.id) }
+
+      it "includes teams that have the specified user as a member" do
+        assert(subject.include?(team1))
+        assert(subject.include?(team3))
+        assert(!subject.include?(team2))
+      end
     end
   end
 

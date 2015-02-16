@@ -7,6 +7,8 @@ class Team < ActiveRecord::Base
 
   default_scope { order("created_at ASC") }
 
+  scope :with_member, -> (user_id) { joins(:members).where("users.id = ?", user_id) }
+
   resourcify
 
   def self.make(owner, params)
