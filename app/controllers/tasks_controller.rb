@@ -28,17 +28,25 @@ class TasksController < ApplicationController
   def edit
     @task = Task.find(params[:id])
     @icons = TaskIcon.all
-    authorize! :update, @task
+    authorize! :view_edit, @task
   end
 
   def update
     @task = Task.find(params[:id])
     task = authorize_with_transaction!(:update) do
-      Task.find_and_update(params[:id], task_params)
+      if current_user == @task.user
+        Task.find_and_update(params[:id], task_params)
+      elsif @task.user.teammates_with?(current_user)
+        Task.find_and_update(params[:id], params.require(:task).permit(:last_completed_at))
+      end
     end
-    if task.valid? && params[:task][:redirect_to_dashboard]
-      @tasks = current_user.tasks
-      render "dashboard/show"
+
+    redirection = params[:task][:redirection]
+    if task.valid? && "dashboard" == redirection
+      redirect_to root_path
+    elsif task.valid? && "team" == redirection
+      team = Team.find(params[:task][:team_id])
+      redirect_to team_path(team)
     elsif task.valid?
       flash[:notice] = "Awesomesauce! Task successfully updated."
       redirect_to tasks_path

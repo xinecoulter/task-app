@@ -106,7 +106,7 @@ describe TasksController do
     end
 
     it "checks authorization" do
-      controller.should_receive(:authorize!).with(:update, task)
+      controller.should_receive(:authorize!).with(:view_edit, task)
       subject
     end
 
@@ -117,8 +117,8 @@ describe TasksController do
   end
 
   describe "PATCH 'update'" do
-    let(:task) { create(:task, user: user) }
-    let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month" } }
+    let(:task) { create(:task, user: user, name: "Rent", interval_number: 2, interval_type: "week") }
+    let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", last_completed_at: DateTime.now } }
     subject { patch :update, id: task.id, task: params }
 
     it "checks authorization" do
@@ -132,18 +132,38 @@ describe TasksController do
     end
 
     context "with valid attributes" do
-      it "updates the task in the database" do
-        subject
-        expect(task.reload.name).to eq("Pay rent")
-      end
-
       it "raises an exception when the update is unsuccessful" do
         Task.stub(:find_and_update).and_raise(Exception)
         assert_raises(Exception) { subject }
       end
 
-      context "when param[:task][:redirect_to_dashboard] is true" do
-        let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", redirect_to_dashboard: true } }
+      context "when the current_user is the owner of the task" do
+        it "updates the task in the database" do
+          subject
+          assert("Pay rent" == task.reload.name)
+          assert(1 == task.reload.interval_number)
+          assert("month" == task.reload.interval_type)
+          assert(task.reload.last_completed_at.present?)
+        end
+      end
+
+      context "when the current_user is the teammate of the owner of the task" do
+        let(:team) { create(:team) }
+        let(:other_user) { create(:user) }
+        let(:task) { create(:task, user: other_user) }
+        before { team.members << user << other_user }
+
+        it "updates the task in the database with only :last_completed_at" do
+          subject
+          assert("Pay rent" != task.reload.name)
+          assert(1 != task.reload.interval_number)
+          assert("month" != task.reload.interval_type)
+          assert(task.reload.last_completed_at.present?)
+        end
+      end
+
+      context "when param[:task][:redirection] is 'dashboard'" do
+        let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", redirection: "dashboard" } }
 
         it "does not set the flash" do
           subject
@@ -152,11 +172,27 @@ describe TasksController do
 
         it "renders the root path" do
           subject
-          expect(response).to render_template "dashboard/show"
+          assert_redirected_to root_path
         end
       end
 
-      context "when param[:task][:redirect_to_dashboard] is not true" do
+      context "when param[:task][:redirection] is 'team'" do
+        let(:team) { create(:team) }
+        let(:params) { { name: "Pay rent", interval_number: "1", interval_type: "month", redirection: "team", team_id: team.id } }
+        before { team.members << user }
+
+        it "does not set the flash" do
+          subject
+          assert(flash[:notice].nil?)
+        end
+
+        it "renders the team path" do
+          subject
+          assert_redirected_to team_path(team)
+        end
+      end
+
+      context "when param[:task][:redirection] is nil" do
         it "sets the flash" do
           subject
           assert("Awesomesauce! Task successfully updated." == flash[:notice])
