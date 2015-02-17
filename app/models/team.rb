@@ -2,6 +2,7 @@ class Team < ActiveRecord::Base
   has_many :team_memberships, dependent: :destroy
   has_many :members, through: :team_memberships
   has_many :team_membership_invitations, dependent: :destroy
+  has_many :scores, dependent: :destroy
 
   validates_presence_of :name
 

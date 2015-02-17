@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
             foreign_key: :user_id, dependent: :destroy
   has_many :incoming_team_membership_invitations, class_name: "TeamMembershipInvitation",
             foreign_key: :invited_user_id, dependent: :destroy
+  has_many :scores, foreign_key: :member_id, dependent: :destroy
 
   def membership_in(team)
     team_memberships.find_by_team_id(team.id)
