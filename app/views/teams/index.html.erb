@@ -19,7 +19,7 @@
         <% @teams.each_with_index do |team, i| %>
           <tr>
             <td><%= i + 1 %></td>
-            <td><%= link_to team.name, team_path(team) %></td>
+            <td><%= link_to team.name, team_path(team), method: :get %></td>
             <% if Ability.new(current_user).can?(:manage, team) %>
               <td><%= link_to('Invite User', team_team_membership_invitations_path(team), method: :get, class: "btn btn-success") %></td>
               <td><%= link_to('Edit', edit_team_path(team), method: :get, class: "btn btn-warning") %></td>
