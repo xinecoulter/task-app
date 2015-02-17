@@ -5,12 +5,14 @@
   <div class="row">
     <div class="col-md-6 col-sm-6">
       <p><%= @member_1.email %></p>
+      <%= render partial: "tasks/task_progress_bars", locals: { tasks: @member_1.tasks } %>
       <%= render partial: "tasks/taskbar", locals: { tasks: @member_1.tasks, redirection: "team", team_id: @team.id } %>
     </div>
 
     <% if @member_2 %>
       <div class="col-md-6 col-sm-6">
         <p><%= @member_2.email %></p>
+        <%= render partial: "tasks/task_progress_bars", locals: { tasks: @member_2.tasks } %>
         <%= render partial: "tasks/taskbar", locals: { tasks: @member_2.tasks, redirection: "team", team_id: @team.id } %>
       </div>
     <% end %>
