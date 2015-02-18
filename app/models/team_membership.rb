@@ -7,6 +7,7 @@ class TeamMembership < ActiveRecord::Base
   def self.make(user_id, team_id)
     membership = TeamMembership.new(member_id: user_id, team_id: team_id)
     membership.save
+    Score.make(user_id, team_id)
     membership
   end
 end

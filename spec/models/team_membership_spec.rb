@@ -31,5 +31,10 @@ describe TeamMembership do
     it "saves the new team_membership in the database" do
       expect { subject }.to change(TeamMembership, :count).by(1)
     end
+
+    it "sends a message to Score.make" do
+      Score.should_receive(:make).with(user.id, team.id)
+      subject
+    end
   end
 end
