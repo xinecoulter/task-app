@@ -4,4 +4,8 @@ class Score < ActiveRecord::Base
 
   validates_uniqueness_of :member_id, scope: :team_id
 
+  def self.make(user_id, team_id)
+    score = Score.create(member_id: user_id, team_id: team_id)
+    score
+  end
 end

@@ -21,4 +21,20 @@ describe Score do
     duplicate = build(:score, member: user, team: team)
     assert(duplicate.invalid?)
   end
+
+  describe ".make" do
+    subject { Score.make(user.id, team.id) }
+
+    it "makes a new score with the provided params" do
+      score = subject
+      assert(score.class == Score)
+      assert(score.persisted?)
+      assert(team == score.team)
+      assert(user == score.member)
+    end
+
+    it "saves the new score in the database" do
+      expect { subject }.to change(Score, :count).by(1)
+    end
+  end
 end
