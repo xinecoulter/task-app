@@ -5,7 +5,7 @@ class TeamMembershipInvitation < ActiveRecord::Base
 
   validates_presence_of :invited_user_id
   validates_uniqueness_of :invited_user_id, scope: [:user_id, :team_id]
-  validate :not_already_a_member , on: :create
+  validate :not_already_a_member, on: :create
 
   attr_accessor :invited_user_email
 
