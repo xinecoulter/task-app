@@ -8,4 +8,11 @@ class Score < ActiveRecord::Base
     score = Score.create(member_id: user_id, team_id: team_id)
     score
   end
+
+  def self.find_and_update(id, points)
+    score = find(id)
+    score.update(points: score.points + points) if score.team.is_full?
+    score
+  end
+
 end
