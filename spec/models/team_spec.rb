@@ -80,4 +80,29 @@ describe Team do
       assert(subject.name == name)
     end
   end
+
+  describe "#is_full?" do
+    let(:team) { create(:team) }
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
+    let(:another_user) { create(:user) }
+    before { team.members << user }
+    subject { team.is_full? }
+
+    context "when the number of members is less than the maximum" do
+      it { should be_falsey }
+    end
+
+    context "when the number of members is equal to the the maximum" do
+      before { team.members << other_user }
+
+      it { should be_truthy }
+    end
+
+    context "when the number of members is greater than the maximum" do
+      before { team.members << other_user << another_user }
+
+      it { should be_truthy }
+    end
+  end
 end

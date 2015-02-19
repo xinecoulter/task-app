@@ -4,6 +4,8 @@ class Team < ActiveRecord::Base
   has_many :team_membership_invitations, dependent: :destroy
   has_many :scores, dependent: :destroy
 
+  MAX_NUMBER_OF_MEMBERS = 2
+
   validates_presence_of :name
 
   default_scope { order("created_at ASC") }
@@ -23,5 +25,9 @@ class Team < ActiveRecord::Base
     team = find(id)
     team.update(params)
     team
+  end
+
+  def is_full?
+    members.count >= Team::MAX_NUMBER_OF_MEMBERS
   end
 end
