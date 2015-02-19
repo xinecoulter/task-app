@@ -77,7 +77,7 @@ describe Team do
 
     it "finds and updates the team" do
       expect { subject }.to_not change(Team, :count)
-      assert(subject.name = name)
+      assert(subject.name == name)
     end
   end
 end
