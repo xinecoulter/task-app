@@ -98,10 +98,10 @@ describe Task do
 
     it "finds and updates the task" do
       expect { subject }.to_not change(Task, :count)
-      assert(subject.name = name)
-      assert(subject.description = description)
-      assert(subject.interval_number = interval_number.to_i)
-      assert(subject.interval_type = interval_type)
+      assert(subject.name == name)
+      assert(subject.description == description)
+      assert(subject.interval_number == interval_number.to_i)
+      assert(subject.interval_type == interval_type)
     end
 
     context "when interval_number and interval_type are included in params" do
