@@ -52,4 +52,10 @@ class Task < ActiveRecord::Base
     return true if last_completed_at.nil?
     DateTime.now >= task_due
   end
+
+  def calculate_points_to_award(new_date_time)
+    return 2 if new_date_time > (task_due - 86400)
+
+    ((task_due - new_date_time) / 86400).to_i * 2
+  end
 end
