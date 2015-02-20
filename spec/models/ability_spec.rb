@@ -96,7 +96,7 @@ describe Ability do
   end
 
   describe "team_memberships" do
-    it "can create a team_membership to a team if it is the invited_user of a team_membership_invitation to the team" do
+    it "can create a team_membership to a team if it is the invited_user of a team_membership_invitation to the team (other requirements met)" do
       team = create(:team)
       invitation = create(:team_membership_invitation, invited_user: user, team: team)
       membership = build(:team_membership, member: user, team: team)
@@ -104,6 +104,21 @@ describe Ability do
     end
     it "cannot create a team_membership to a team if it is not the invited_user of a team_membership_invitation to the team" do
       team = create(:team)
+      membership = build(:team_membership, member: user, team: team)
+      expect(ability).to_not be_able_to(:create, membership)
+    end
+    it "can create a team_membership to a team if the team is not full (other requirements met)" do
+      team = create(:team)
+      team.members << other_user
+      invitation = create(:team_membership_invitation, invited_user: user, team: team)
+      membership = build(:team_membership, member: user, team: team)
+      expect(ability).to be_able_to(:create, membership)
+    end
+    it "cannot create a team_membership to a team if the team is full" do
+      another_user = create(:user)
+      team = create(:team)
+      team.members << other_user << another_user
+      invitation = create(:team_membership_invitation, invited_user: user, team: team)
       membership = build(:team_membership, member: user, team: team)
       expect(ability).to_not be_able_to(:create, membership)
     end
