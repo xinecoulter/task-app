@@ -3,6 +3,7 @@ require "rails_helper"
 describe TeamMembershipInvitation do
   let(:user) { create(:user) }
   let(:invited_user) { create(:user) }
+  let(:other_user) { create(:user) }
   let(:team) { create(:team) }
 
   it "can be created" do
@@ -28,6 +29,12 @@ describe TeamMembershipInvitation do
   it "is unique for a given invited_user, user, and team" do
     create(:team_membership_invitation, invited_user: invited_user, user: user, team: team)
     duplicate = build(:team_membership_invitation, invited_user: invited_user, user: user, team: team)
+    assert(duplicate.invalid?)
+  end
+
+  it "is unique for team" do
+    create(:team_membership_invitation, invited_user: invited_user, user: user, team: team)
+    duplicate = build(:team_membership_invitation, invited_user: other_user, user: user, team: team)
     assert(duplicate.invalid?)
   end
 
