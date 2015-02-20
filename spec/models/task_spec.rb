@@ -86,7 +86,7 @@ describe Task do
 
   describe ".find_and_update" do
     let(:user) { create(:user) }
-    let!(:task) { create(:task, name: "Garbage", description: "Take out the garbage!") }
+    let!(:task) { create(:task, user: user, name: "Garbage", description: "Take out the garbage!", last_completed_at: nil) }
     let(:name) { "Recycables" }
     let(:description) { "Take out the recycables!" }
     let(:interval_number) { "1" }
@@ -95,14 +95,6 @@ describe Task do
       interval_type: interval_type } }
     before { Task.stub(:calculate_interval) }
     subject { Task.find_and_update(task.id, params) }
-
-    it "finds and updates the task" do
-      expect { subject }.to_not change(Task, :count)
-      assert(subject.name == name)
-      assert(subject.description == description)
-      assert(subject.interval_number == interval_number.to_i)
-      assert(subject.interval_type == interval_type)
-    end
 
     context "when interval_number and interval_type are included in params" do
       it "sends a message to Task.calculate_interval" do
@@ -116,6 +108,36 @@ describe Task do
       it "does not send a message to Task.calculate_interval" do
         Task.should_not_receive(:calculate_interval)
         subject
+      end
+    end
+
+    context "when last_completed_at is included in params" do
+      let(:other_user) { create(:user) }
+      let(:team) { create(:team) }
+      let!(:score) { create(:score, member: user, team: team, points: 0) }
+      let!(:current_time) { DateTime.now }
+      let(:params) { { last_completed_at: current_time } }
+      before { team.members << user << other_user }
+
+      it "updates the user's scores (other requirements met)" do
+        assert(score.points == 0)
+        subject
+        assert(score.reload.points == 2)
+      end
+
+      it "finds and updates the task" do
+        expect { subject }.to_not change(Task, :count)
+        assert(subject.last_completed_at == params[:last_completed_at])
+      end
+    end
+
+    context "when last_completed_at is not included in params" do
+      it "finds and updates the task" do
+        expect { subject }.to_not change(Task, :count)
+        assert(subject.name == name)
+        assert(subject.description == description)
+        assert(subject.interval_number == interval_number.to_i)
+        assert(subject.interval_type == interval_type)
       end
     end
   end
