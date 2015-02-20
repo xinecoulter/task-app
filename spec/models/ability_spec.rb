@@ -86,6 +86,13 @@ describe Ability do
       invitation = build(:team_membership_invitation)
       expect(ability).to_not be_able_to(:destroy, invitation)
     end
+    it "cannot create a team_membership_invitation to a team if the team is full" do
+      team = create(:team)
+      team.members << user << other_user
+      invitation = build(:team_membership_invitation, team: team)
+      user.add_role :owner, invitation.team
+      expect(ability).to_not be_able_to(:create, invitation)
+    end
   end
 
   describe "team_memberships" do

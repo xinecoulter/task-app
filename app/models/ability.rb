@@ -28,6 +28,9 @@ class Ability
     can [:create, :destroy], TeamMembershipInvitation do |invite|
       @user.has_role? :owner, invite.team
     end
+    cannot [:create], TeamMembershipInvitation do |invite|
+      invite.team.is_full?
+    end
     can [:create], TeamMembership do |membership|
       @user.invited_to?(membership.team)
     end
