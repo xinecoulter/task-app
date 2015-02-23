@@ -38,4 +38,8 @@ class User < ActiveRecord::Base
     teams.with_member(user.id).present?
   end
 
+  def score_in(team)
+    scores.find_by_team_id(team.id)
+  end
+
 end

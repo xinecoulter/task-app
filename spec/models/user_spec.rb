@@ -127,4 +127,22 @@ describe User do
       it { should be_falsey }
     end
   end
+
+  describe "#score_in" do
+    let(:team) { create(:team) }
+    before { team.members << user }
+    subject { user.score_in(team) }
+
+    context "when the user has a score in a team" do
+      let!(:score) { create(:score, member: user, team: team) }
+      it "is the score" do
+        assert(score == subject)
+      end
+    end
+    context "when the user has no score in a team" do
+      it "is nil" do
+        assert(subject.nil?)
+      end
+    end
+  end
 end
