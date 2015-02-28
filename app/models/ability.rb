@@ -32,7 +32,7 @@ class Ability
       invite.team.is_full?
     end
     can [:create], TeamMembership do |membership|
-      @user.invited_to?(membership.team) && !membership.team.is_full?
+      @user.invited_to?(membership.team)
     end
     cannot [:destroy], TeamMembership do |membership|
       @user.has_role?(:owner, membership.team)

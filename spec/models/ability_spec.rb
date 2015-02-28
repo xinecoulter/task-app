@@ -107,21 +107,6 @@ describe Ability do
       membership = build(:team_membership, member: user, team: team)
       expect(ability).to_not be_able_to(:create, membership)
     end
-    it "can create a team_membership to a team if the team is not full (other requirements met)" do
-      team = create(:team)
-      team.members << other_user
-      invitation = create(:team_membership_invitation, invited_user: user, team: team)
-      membership = build(:team_membership, member: user, team: team)
-      expect(ability).to be_able_to(:create, membership)
-    end
-    it "cannot create a team_membership to a team if the team is full" do
-      another_user = create(:user)
-      team = create(:team)
-      team.members << other_user << another_user
-      invitation = create(:team_membership_invitation, invited_user: user, team: team)
-      membership = build(:team_membership, member: user, team: team)
-      expect(ability).to_not be_able_to(:create, membership)
-    end
     it "can destroy a team_membership if it is the member of the team_membership" do
       membership = create(:team_membership, member: user)
       expect(ability).to be_able_to(:destroy, membership)
@@ -130,7 +115,7 @@ describe Ability do
       membership = create(:team_membership)
       expect(ability).to_not be_able_to(:destroy, membership)
     end
-    it "cannot destroy a team_membership if it the owner of the team" do
+    it "cannot destroy a team_membership if it is the owner of the team" do
       team = create(:team)
       user.add_role(:owner, team)
       membership = create(:team_membership, member: user, team: team)
