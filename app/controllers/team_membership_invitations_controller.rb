@@ -7,7 +7,7 @@ class TeamMembershipInvitationsController < ApplicationController
   end
 
   def create
-    invited_user = User.find_by_email(params[:team_membership_invitation][:invited_user_email])
+    invited_user = User.find_by_email(params[:team_membership_invitation][:invited_user_email].downcase)
     team = Team.find(params[:team_id])
     invitation = authorize_with_transaction!(:create) do
       TeamMembershipInvitation.make(current_user, invited_user, team)
