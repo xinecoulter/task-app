@@ -186,7 +186,7 @@ describe TasksController do
           assert(flash[:notice].nil?)
         end
 
-        it "renders the team path" do
+        it "redirects to the team path" do
           subject
           assert_redirected_to team_path(team)
         end
