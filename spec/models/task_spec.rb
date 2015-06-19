@@ -243,4 +243,28 @@ describe Task do
     end
   end
 
+  describe "#calculate_point_worth" do
+    subject { task.calculate_point_worth }
+    context "when the estimated effort is less than or equal to 15" do
+      let(:task) { create(:task, estimated_effort: 15) }
+      it "is 1" do
+        assert(1 == subject)
+      end
+    end
+
+    context "when the estimated effort is greater than or equal to 30" do
+      let(:task) { create(:task, estimated_effort: 30) }
+      it "is 5" do
+        assert(5 == subject)
+      end
+    end
+
+    context "otherwise" do
+      let(:task) { create(:task, estimated_effort: 20) }
+      it "is 2" do
+        assert(2 == subject)
+      end
+    end
+  end
+
 end
