@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217044728) do
+ActiveRecord::Schema.define(version: 20150619160021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,8 @@ ActiveRecord::Schema.define(version: 20150217044728) do
     t.integer  "interval_number"
     t.string   "interval_type"
     t.integer  "task_icon_id"
+    t.integer  "estimated_effort"
+    t.integer  "point_value"
   end
 
   create_table "team_membership_invitations", force: true do |t|
