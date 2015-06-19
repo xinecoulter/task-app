@@ -70,6 +70,6 @@ private
 
   def task_params
     params.require(:task).permit(:name, :description, :last_completed_at, :interval_number, :interval_type,
-      :last_completed_at, :task_icon_id)
+      :last_completed_at, :task_icon_id, :estimated_effort)
   end
 end

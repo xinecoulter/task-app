@@ -29,6 +29,17 @@
     </div>
 
     <div class="row">
+      <div class="col-md-6">
+        <label>Estimated time to complete task (minutes)</label>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <%= f.text_field :estimated_effort, class: "form-control", id: "input-task-estimated-effort", placeholder: "Estimated time" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="form-group col-md-12 task-icon-selection">
         <label>Task icon</label>
         <%= content_tag "div", class: "task-icon-selection-container", data: { icon_id: @task.task_icon_id } do %>
