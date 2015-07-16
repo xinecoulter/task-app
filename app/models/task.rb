@@ -28,6 +28,10 @@ class Task < ActiveRecord::Base
       params[:interval] = calculate_interval(params[:interval_number].to_i, params[:interval_type])
     end
 
+    if params[:estimated_effort]
+      params[:point_value] = task.calculate_point_worth(params[:estimated_effort].to_i)
+    end
+
     if params[:last_completed_at]
       points = task.calculate_points_to_award(params[:last_completed_at].to_datetime)
       transaction do

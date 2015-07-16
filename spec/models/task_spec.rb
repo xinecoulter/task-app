@@ -104,9 +104,13 @@ describe Task do
     let(:description) { "Take out the recycables!" }
     let(:interval_number) { "1" }
     let(:interval_type) { "weeks" }
+    let(:estimated_effort) { "15" }
     let(:params) { { name: name, description: description, interval_number: interval_number,
-      interval_type: interval_type } }
-    before { Task.stub(:calculate_interval) }
+      interval_type: interval_type, estimated_effort: estimated_effort } }
+    before do
+      Task.stub(:find) { task }
+      Task.stub(:calculate_interval)
+    end
     subject { Task.find_and_update(task.id, params) }
 
     context "when interval_number and interval_type are included in params" do
@@ -120,6 +124,21 @@ describe Task do
       let(:params) { { name: name, description: description } }
       it "does not send a message to Task.calculate_interval" do
         Task.should_not_receive(:calculate_interval)
+        subject
+      end
+    end
+
+    context "when estimated_effort is included in params" do
+      it "sends a message to Task#calculate_point_worth" do
+        task.should_receive(:calculate_point_worth).with(estimated_effort.to_i)
+        subject
+      end
+    end
+
+    context "when estimated_effort is not included in params" do
+      let(:params) { { name: name, description: description } }
+      it "does not send a message to Task#calculate_point_worth" do
+        task.should_not_receive(:calculate_point_worth)
         subject
       end
     end
