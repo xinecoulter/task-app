@@ -74,10 +74,11 @@ class Task < ActiveRecord::Base
     ((task_due - new_date_time) / 86400).to_i * 2
   end
 
-  def calculate_point_worth
-    if estimated_effort <= 15
+  def calculate_point_worth(new_estimated_effort=nil)
+    effort = new_estimated_effort ? new_estimated_effort : estimated_effort
+    if effort <= 15
       1
-    elsif estimated_effort >= 30
+    elsif effort >= 30
       5
     else
       2

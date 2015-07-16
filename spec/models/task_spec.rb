@@ -257,25 +257,51 @@ describe Task do
   end
 
   describe "#calculate_point_worth" do
-    subject { task.calculate_point_worth }
-    context "when the estimated effort is less than or equal to 15" do
-      let(:task) { create(:task, estimated_effort: 15) }
-      it "is 1" do
-        assert(1 == subject)
+    context "when new_estimated_effort is nil" do
+      subject { task.calculate_point_worth }
+      context "and the estimated_effort is less than or equal to 15" do
+        let(:task) { create(:task, estimated_effort: 15) }
+        it "is 1" do
+          assert(1 == subject)
+        end
+      end
+
+      context "and the estimated_effort is greater than or equal to 30" do
+        let(:task) { create(:task, estimated_effort: 30) }
+        it "is 5" do
+          assert(5 == subject)
+        end
+      end
+
+      context "otherwise" do
+        let(:task) { create(:task, estimated_effort: 20) }
+        it "is 2" do
+          assert(2 == subject)
+        end
       end
     end
-
-    context "when the estimated effort is greater than or equal to 30" do
-      let(:task) { create(:task, estimated_effort: 30) }
-      it "is 5" do
-        assert(5 == subject)
+    context "when the new_estimated_effort is not nil" do
+      subject { task.calculate_point_worth(new_estimated_effort) }
+      context "and the new_estimated_effort is less than or equal to 15" do
+        let(:task) { create(:task, estimated_effort: 30) }
+        let(:new_estimated_effort) { 15 }
+        it "is 1 despite the estimated_effort" do
+          assert(1 == subject)
+        end
       end
-    end
-
-    context "otherwise" do
-      let(:task) { create(:task, estimated_effort: 20) }
-      it "is 2" do
-        assert(2 == subject)
+      context "and the new_estimated_effort is greater than or equal to 30" do
+        let(:task) { create(:task, estimated_effort: 20) }
+        let(:new_estimated_effort) { 30 }
+        it "is 5 despite the estimated_effort" do
+          assert(5 == subject)
+        end
+      end
+      context "otherwise" do
+        let(:task) { create(:task, estimated_effort: 15) }
+        let(:new_estimated_effort) { 20 }
+        it "is 2 despite the estimated_effort" do
+          assert(2 == subject)
+        end
       end
     end
   end
