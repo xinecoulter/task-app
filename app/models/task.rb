@@ -16,6 +16,7 @@ class Task < ActiveRecord::Base
     task = new(params)
     task.user_id = user_id
     task.interval = calculate_interval(params[:interval_number].to_i, params[:interval_type])
+    task.point_value = task.calculate_point_worth
     task.save
     task
   end

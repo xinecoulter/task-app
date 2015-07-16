@@ -67,8 +67,11 @@ describe Task do
     let(:interval_number) { "2" }
     let(:interval_type) { "week" }
     let(:params) { { name: name, description: description, interval_number: interval_number,
-      interval_type: interval_type } }
-    before { Task.stub(:calculate_interval) { 86400 } }
+      interval_type: interval_type, estimated_effort: 30 } }
+    before do
+      Task.stub(:calculate_interval) { 86400 }
+      Task.any_instance.stub(:calculate_point_worth) { 5 }
+    end
     subject { Task.make(user.id, params) }
 
     it "makes a new task" do
@@ -86,6 +89,11 @@ describe Task do
       assert(task.description == description)
       assert(task.interval_number == interval_number.to_i)
       assert(task.interval_type == interval_type)
+    end
+
+    it "gives the task a point_value" do
+      task = subject
+      assert(5 == task.point_value)
     end
   end
 
