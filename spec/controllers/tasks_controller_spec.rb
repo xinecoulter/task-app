@@ -44,8 +44,9 @@ describe TasksController do
   end
 
   describe "POST 'create'" do
-    let(:params) { { name: "Vacuum", interval_number: "1", interval_type: "week" } }
-    let(:the_task) { create(:task, name: "Vacuum", interval_number: 1, interval_type: "week") }
+    let(:params) { { name: "Vacuum", interval_number: "1", interval_type: "week", estimated_effort: 30 } }
+    let(:the_task) { create(:task, name: "Vacuum", interval_number: 1, interval_type: "week", estimated_effort: 30) }
+    before { Task.any_instance.stub(:calculate_point_worth) { 5 } }
     subject { post :create, task: params }
 
     it "checks authorization" do

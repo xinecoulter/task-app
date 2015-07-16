@@ -45,6 +45,11 @@ describe Task do
     assert(build(:task, interval_type: "year").invalid?)
   end
 
+  it "must have an estimated_effort" do
+    task = build(:task, estimated_effort: nil)
+    expect { task.save! }.to raise_error
+  end
+
   describe "default scope" do
     let!(:task1) { create(:task, created_at: 5.days.ago) }
     let!(:task2) { create(:task, created_at: 2.days.from_now) }
