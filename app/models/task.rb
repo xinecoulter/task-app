@@ -34,10 +34,9 @@ class Task < ActiveRecord::Base
     end
 
     if params[:last_completed_at]
-      points = task.calculate_points_to_award(params[:last_completed_at].to_datetime)
       transaction do
         Score.where(member_id: task.user_id).each do |score|
-          Score.find_and_update(score.id, points)
+          Score.find_and_update(score.id, task.point_value)
         end
         task.update(params)
       end
@@ -73,12 +72,6 @@ class Task < ActiveRecord::Base
   def ready_for_completion?
     return true if last_completed_at.nil?
     DateTime.now >= task_due
-  end
-
-  def calculate_points_to_award(new_date_time)
-    return 2 if new_date_time > (task_due - 86400)
-
-    ((task_due - new_date_time) / 86400).to_i * 2
   end
 
   def calculate_point_worth(new_estimated_effort=nil)

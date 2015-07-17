@@ -152,7 +152,7 @@ describe Task do
       it "updates the user's scores (other requirements met)" do
         assert(score.points == 0)
         subject
-        assert(score.reload.points == 2)
+        assert(score.reload.points == task.point_value)
       end
 
       it "finds and updates the task" do
@@ -324,26 +324,6 @@ describe Task do
       end
       it "is false" do
         assert(!subject)
-      end
-    end
-  end
-
-  describe "#calculate_points_to_award" do
-    let(:current_time) { DateTime.now }
-    let(:task) { create(:task) }
-    subject { task.calculate_points_to_award(current_time) }
-
-    context "when the current time is more than 24 hours earlier than when the task is due" do
-      before { task.stub(:task_due) { current_time + 605000 } }
-      it "is 2 times every 24 hours it is early" do
-        assert((605000 / 86400) * 2 == subject)
-      end
-    end
-
-    context "when the current time is not more than 24 hours earlier than when the task is due" do
-      before { task.stub(:task_due) { current_time + 86000 } }
-      it "is 2" do
-        assert(2 == subject)
       end
     end
   end

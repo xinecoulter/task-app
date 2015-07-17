@@ -13,5 +13,6 @@ FactoryGirl.define do
     interval 86400
     interval_type "day"
     estimated_effort 30
+    point_value 5
   end
 end
