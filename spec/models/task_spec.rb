@@ -69,7 +69,7 @@ describe Task do
     let(:params) { { name: name, description: description, interval_number: interval_number,
       interval_type: interval_type, estimated_effort: 30 } }
     before do
-      Task.stub(:calculate_interval) { 86400 }
+      Task.any_instance.stub(:calculate_interval) { 86400 }
       Task.any_instance.stub(:calculate_point_worth) { 5 }
     end
     subject { Task.make(user.id, params) }
@@ -78,9 +78,9 @@ describe Task do
       expect{ subject }.to change(Task, :count).by(1)
     end
 
-    it "sends a message to Task.calculate_interval" do
-      Task.should_receive(:calculate_interval).with(interval_number.to_i, interval_type)
-      subject
+    it "gives the task an interval" do
+      task = subject
+      assert(86400 == task.interval)
     end
 
     it "gives the task the specified attributes" do
@@ -103,19 +103,17 @@ describe Task do
     let(:name) { "Recycables" }
     let(:description) { "Take out the recycables!" }
     let(:interval_number) { "1" }
-    let(:interval_type) { "weeks" }
+    let(:interval_type) { "week" }
     let(:estimated_effort) { "15" }
     let(:params) { { name: name, description: description, interval_number: interval_number,
       interval_type: interval_type, estimated_effort: estimated_effort } }
-    before do
-      Task.stub(:find) { task }
-      Task.stub(:calculate_interval)
-    end
+    before { Task.stub(:find) { task } }
     subject { Task.find_and_update(task.id, params) }
 
     context "when interval_number and interval_type are included in params" do
       it "sends a message to Task.calculate_interval" do
-        Task.should_receive(:calculate_interval).with(interval_number.to_i, interval_type)
+        task.should_receive(:calculate_interval).with( { new_interval_number: interval_number.to_i,
+                                                           new_interval_type: interval_type } )
         subject
       end
     end
@@ -123,7 +121,7 @@ describe Task do
     context "when interval_number and interval_type are not included in params" do
       let(:params) { { name: name, description: description } }
       it "does not send a message to Task.calculate_interval" do
-        Task.should_not_receive(:calculate_interval)
+        task.should_not_receive(:calculate_interval)
         subject
       end
     end
@@ -174,25 +172,100 @@ describe Task do
     end
   end
 
-  describe ".calculate_interval" do
-    let(:interval_number) { 1 }
-    subject { Task.calculate_interval(interval_number, interval_type) }
-    context "when interval_type is 'day'" do
-      let(:interval_type) { "day" }
-      it "multiplies the interval_number by 86400 (seconds)" do
-        assert(subject == 86400)
+  describe "#calculate_interval" do
+    let(:task) { build(:task, interval_number: 1, interval_type: interval_type) }
+    context "when there is no new_interval_number" do
+      context "and there is no new_interval_type" do
+        subject { task.calculate_interval }
+        context "and the interval_type is 'day'" do
+          let(:interval_type) { "day" }
+          it "multiplies the interval_number by 86400 (seconds)" do
+            assert(subject == 86400)
+          end
+        end
+        context "and the interval_type is 'week'" do
+          let(:interval_type) { "week" }
+          it "multiplies the interval_number by 604800 (seconds)" do
+            assert(subject == 604800)
+          end
+        end
+        context "and the interval_type is 'month'" do
+          let(:interval_type) { "month" }
+          it "multiplies the interval_number 2592000 by (seconds)" do
+            assert(subject == 2592000)
+          end
+        end
+      end
+      context "and there is a new_interval_type" do
+        subject { task.calculate_interval( { new_interval_type: new_interval_type } ) }
+        context "and the new_interval_type is 'day'" do
+          let(:new_interval_type) { "day" }
+          let(:interval_type) { "month" }
+          it "multiplies the interval_number by 86400 (seconds) despite the interval_type" do
+            assert(subject == 86400)
+          end
+        end
+        context "and the new_interval_type is 'week'" do
+          let(:new_interval_type) { "week" }
+          let(:interval_type) { "day" }
+          it "multiplies the interval_number by 604800 (seconds) despite the interval_type" do
+            assert(subject == 604800)
+          end
+        end
+        context "and the new_interval_type is 'month'" do
+          let(:new_interval_type) { "month" }
+          let(:interval_type) { "week" }
+          it "multiplies the interval_number 2592000 by (seconds) despite the interval_type" do
+            assert(subject == 2592000)
+          end
+        end
       end
     end
-    context "when the interval_type is 'week'" do
-      let(:interval_type) { "week" }
-      it "multiplies the interval_number by 604800 (seconds)" do
-        assert(subject == 604800)
+    context "when there is a new_interval_number" do
+      context "and there is no new_interval_type" do
+        subject { task.calculate_interval( { new_interval_number: 2 } ) }
+        context "and the interval_type is 'day'" do
+          let(:interval_type) { "day" }
+          it "multiplies the new_interval_number by 86400 (seconds) despite the interval_number" do
+            assert(subject == 86400 * 2)
+          end
+        end
+        context "and the interval_type is 'week'" do
+          let(:interval_type) { "week" }
+          it "multiplies the new_interval_number by 604800 (seconds) despite the interval_number" do
+            assert(subject == 604800 * 2)
+          end
+        end
+        context "and the interval_type is 'month'" do
+          let(:interval_type) { "month" }
+          it "multiplies the new_interval_number 2592000 by (seconds) despite the interval_number" do
+            assert(subject == 2592000 * 2)
+          end
+        end
       end
-    end
-    context "when the interval_type is 'month'" do
-      let(:interval_type) { "month" }
-      it "multiplies the interval_number 2592000 by (seconds)" do
-        assert(subject == 2592000)
+      context "and there is a new_interval_type" do
+        subject { task.calculate_interval( { new_interval_type: new_interval_type, new_interval_number: 2 } ) }
+        context "and the new_interval_type is 'day'" do
+          let(:new_interval_type) { "day" }
+          let(:interval_type) { "month" }
+          it "multiplies the new_interval_number by 86400 (seconds) despite the interval_type and interval_number" do
+            assert(subject == 86400 * 2)
+          end
+        end
+        context "and the new_interval_type is 'week'" do
+          let(:new_interval_type) { "week" }
+          let(:interval_type) { "day" }
+          it "multiplies the new_interval_number by 604800 (seconds) despite the interval_type and interval_number" do
+            assert(subject == 604800 * 2)
+          end
+        end
+        context "and the new_interval_type is 'month'" do
+          let(:new_interval_type) { "month" }
+          let(:interval_type) { "week" }
+          it "multiplies the new_interval_number 2592000 by (seconds) despite the interval_type and interval_number" do
+            assert(subject == 2592000 * 2)
+          end
+        end
       end
     end
   end

@@ -15,7 +15,7 @@ class Task < ActiveRecord::Base
   def self.make(user_id, params)
     task = new(params)
     task.user_id = user_id
-    task.interval = calculate_interval(params[:interval_number].to_i, params[:interval_type])
+    task.interval = task.calculate_interval
     task.point_value = task.calculate_point_worth
     task.save
     task
@@ -25,7 +25,8 @@ class Task < ActiveRecord::Base
     task = find(id)
 
     if params[:interval_number] && params[:interval_type]
-      params[:interval] = calculate_interval(params[:interval_number].to_i, params[:interval_type])
+      options = { new_interval_number: params[:interval_number].to_i, new_interval_type: params[:interval_type] }
+      params[:interval] = task.calculate_interval(options)
     end
 
     if params[:estimated_effort]
@@ -47,8 +48,10 @@ class Task < ActiveRecord::Base
     task
   end
 
-  def self.calculate_interval(interval_number, interval_type)
-    case interval_type
+  def calculate_interval(options={})
+    int_type = options[:new_interval_type] ? options[:new_interval_type] : interval_type
+    int_number = options[:new_interval_number] ? options[:new_interval_number] : interval_number
+    case int_type
     when "day"
       seconds_multiplier = 86400 # 1 day (24 hrs * 60 min * 60 sec)
     when "week"
@@ -56,7 +59,7 @@ class Task < ActiveRecord::Base
     when "month"
       seconds_multiplier = 2592000 # 30 days (30 days * 24 hrs * 60 min * 60 sec)
     end
-    interval_number * seconds_multiplier
+    int_number * seconds_multiplier
   end
 
   def task_due
