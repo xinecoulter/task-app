@@ -8,6 +8,7 @@ class Task < ActiveRecord::Base
   validates_presence_of :interval
   validates_presence_of :interval_number
   validates_presence_of :estimated_effort
+  validates_presence_of :point_value
   validates_inclusion_of :interval_type, in: INTERVAL_TYPES
 
   default_scope { order("created_at ASC") }

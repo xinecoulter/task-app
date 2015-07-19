@@ -50,6 +50,11 @@ describe Task do
     expect { task.save! }.to raise_error
   end
 
+  it "must have a point_value" do
+    task = build(:task, point_value: nil)
+    expect { task.save! }.to raise_error
+  end
+
   describe "default scope" do
     let!(:task1) { create(:task, created_at: 5.days.ago) }
     let!(:task2) { create(:task, created_at: 2.days.from_now) }
