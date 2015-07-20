@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, skip: [:sessions]
+  devise_for :users, skip: [:sessions], controllers: {omniauth_callbacks: "omniauth_callbacks"}
 
   authenticated :user do
     root to: "dashboard#show", as: :authenticated_root
