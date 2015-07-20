@@ -44,4 +44,13 @@ class User < ActiveRecord::Base
     scores.find_by_team_id(team.id)
   end
 
+  def add_identity(auth)
+    transaction do
+      identity = Identity.from_omniauth(auth)
+      unless identities.include? identity
+        identities << identity
+      end
+      identity
+    end
+  end
 end

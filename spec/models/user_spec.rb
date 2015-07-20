@@ -145,4 +145,45 @@ describe User do
       end
     end
   end
+
+  describe "#add_identity" do
+    let(:name) { "instagraph" }
+    let(:uid) { "24601" }
+    let(:token) { "token" }
+    let(:credentials) { double(token: token) }
+    let(:auth) { double(provider: name, uid: uid, credentials: credentials ) }
+    subject { user.add_identity(auth) }
+
+    it "returns the identity that matches the auth hash" do
+      response = subject
+      assert(name == response.name)
+      assert(uid == response.uid)
+    end
+
+    it "does not persist changes to the identity if assigning the identity to the user blows up" do
+      user.identities.stub(:<<).and_raise(StandardError)
+      expect { subject rescue StandardError }.to_not change(Identity, :count)
+    end
+
+    context "when the user's identities include the identity" do
+      let!(:identity) { create(:identity, name: name, uid: uid) }
+      before { user.identities << identity }
+
+      it "does not do anything" do
+        assert(user.identities.include? identity)
+        subject
+        assert(user.identities.include? identity)
+      end
+    end
+
+    context "when the user's identities do not include the identity" do
+      let!(:identity) { create(:identity, name: name, uid: uid) }
+
+      it "assigns the identity to the user" do
+        assert(!user.identities.include?(identity))
+        subject
+        assert(user.identities.include? identity)
+      end
+    end
+  end
 end
