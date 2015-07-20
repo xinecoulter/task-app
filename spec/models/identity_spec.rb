@@ -22,4 +22,41 @@ describe Identity do
     assert(build(:identity, token: "abcdefgh").valid?)
     assert(build(:identity, token: nil).valid?)
   end
+
+  describe ".from_omniauth" do
+    let(:name) { "instagraph" }
+    let(:uid) { "24601" }
+    let(:token) { "token" }
+    let(:credentials) { double(token: token) }
+    let(:auth) { double(provider: name, uid: uid, credentials: credentials ) }
+    subject { Identity.from_omniauth(auth) }
+
+    context "when an identity with the auth provider and uid exists" do
+      let!(:identity) { create(:identity, name: name, uid: uid) }
+
+      it "returns the existing identity" do
+        expect { subject }.to_not change(Identity, :count)
+        response = subject
+        assert(identity == response)
+      end
+
+      it "does not change the identity" do
+        assert(token != subject.token)
+      end
+    end
+
+    context "when an identity with the auth provider and uid does not exist" do
+      it "creates a new identity" do
+        expect { subject }.to change(Identity, :count)
+        response = subject
+        assert(name == response.name)
+        assert(uid == response.uid)
+      end
+
+      it "assigns the token" do
+        assert(token == subject.token)
+      end
+    end
+  end
+
 end
