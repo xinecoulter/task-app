@@ -1,28 +1,13 @@
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  # You should configure your model like this:
-  # devise :omniauthable, omniauth_providers: [:twitter]
+  def all
+    identity = current_user.add_identity(request.env["omniauth.auth"])
+    if identity.persisted?
+      flash[:notice] = "Awesomesauce! #{identity.name.titleize} account linked."
+    else
+      flash[:error] = "Womp, womp. Something went wrong."
+    end
+    redirect_to edit_user_registration_path
+  end
 
-  # You should also create an action method in this controller like this:
-  # def twitter
-  # end
-
-  # More info at:
-  # https://github.com/plataformatec/devise#omniauth
-
-  # GET|POST /resource/auth/twitter
-  # def passthru
-  #   super
-  # end
-
-  # GET|POST /users/auth/twitter/callback
-  # def failure
-  #   super
-  # end
-
-  # protected
-
-  # The path used when omniauth fails
-  # def after_omniauth_failure_path_for(scope)
-  #   super(scope)
-  # end
+  alias_method :facebook, :all
 end
