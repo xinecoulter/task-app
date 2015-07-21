@@ -23,11 +23,17 @@ describe Identity do
     assert(build(:identity, token: nil).valid?)
   end
 
+  it "can have an oauth_expires_at" do
+    assert(build(:identity, oauth_expires_at: 7.days.from_now).valid?)
+    assert(build(:identity, oauth_expires_at: nil).valid?)
+  end
+
   describe ".from_omniauth" do
     let(:name) { "instagraph" }
     let(:uid) { "24601" }
     let(:token) { "token" }
-    let(:credentials) { double(token: token) }
+    let(:expires_at) { 1.month.from_now }
+    let(:credentials) { double(token: token, expires_at: expires_at) }
     let(:auth) { double(provider: name, uid: uid, credentials: credentials ) }
     subject { Identity.from_omniauth(auth) }
 
@@ -55,6 +61,10 @@ describe Identity do
 
       it "assigns the token" do
         assert(token == subject.token)
+      end
+
+      it "assigns the oauth_expires_at" do
+        assert(Time.at(expires_at) == subject.oauth_expires_at)
       end
     end
   end

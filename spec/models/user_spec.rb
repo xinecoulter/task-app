@@ -150,7 +150,8 @@ describe User do
     let(:name) { "instagraph" }
     let(:uid) { "24601" }
     let(:token) { "token" }
-    let(:credentials) { double(token: token) }
+    let(:expires_at) { 1.month.from_now }
+    let(:credentials) { double(token: token, expires_at: expires_at) }
     let(:auth) { double(provider: name, uid: uid, credentials: credentials ) }
     subject { user.add_identity(auth) }
 
