@@ -45,6 +45,7 @@ gem 'cancancan'
 gem 'draper', '~> 1.3'
 gem 'rolify'
 gem 'omniauth-facebook'
+gem 'koala'
 
 group :development, :test do
   gem 'rspec-rails'
