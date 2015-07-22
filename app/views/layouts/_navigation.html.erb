@@ -14,6 +14,7 @@
         <li><%= link_to("Dashboard", root_path, method: :get) %></li>
         <li><%= link_to("Manage Tasks", tasks_path, method: :get) %></li>
         <li><%= link_to("Teams", teams_path, method: :get) %></li>
+        <li><%= link_to("Account Settings", edit_user_registration_path, method: :get) %></li>
         <li><%= link_to("Log Out", destroy_user_session_path, method: :delete) %></li>
       </ul>
     </div>
