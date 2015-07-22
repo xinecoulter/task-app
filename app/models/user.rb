@@ -53,4 +53,9 @@ class User < ActiveRecord::Base
       identity
     end
   end
+
+  def facebook
+    identity = identities.find_by_name("facebook")
+    @facebook ||= Koala::Facebook::API.new(identity.token)
+  end
 end

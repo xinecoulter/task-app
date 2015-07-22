@@ -187,4 +187,22 @@ describe User do
       end
     end
   end
+
+  describe "#facebook" do
+    let!(:identity) { create(:identity, user: user, name: "facebook", token: "koalas ain't hard") }
+    before { Koala::Facebook::API.stub(:new) }
+    subject { user.facebook }
+
+    it "creates a Koala Facebook API object" do
+      Koala::Facebook::API.should_receive(:new).with(identity.token)
+      subject
+    end
+
+    it "memoizes the result" do
+      Koala::Facebook::API.should_receive(:new).with(identity.token).once
+      subject
+      subject
+    end
+  end
+
 end
