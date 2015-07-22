@@ -1,0 +1,5 @@
+<% if current_user.identities.find_by_name(provider.to_s) %>
+  <p><%= "Your #{provider.to_s.titleize} account is linked" %></p>
+<% else %>
+  <%= link_to "Link my #{provider.to_s.titleize} account", omniauth_authorize_path(resource_name, provider) %><br />
+<% end %>
