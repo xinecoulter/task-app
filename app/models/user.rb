@@ -16,6 +16,9 @@ class User < ActiveRecord::Base
   has_many :scores, foreign_key: :member_id, dependent: :destroy
   has_many :identities, dependent: :destroy
 
+  validates_presence_of :given_name
+  validates_presence_of :surname
+
   def membership_in(team)
     team_memberships.find_by_team_id(team.id)
   end

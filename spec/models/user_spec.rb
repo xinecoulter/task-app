@@ -29,6 +29,16 @@ describe User do
     expect { user2.update!(email: "christine@example.com") }.to raise_error
   end
 
+  it "must have a given_name" do
+    assert(build(:user, given_name: "Olive").valid?)
+    assert(build(:user, given_name: nil).invalid?)
+  end
+
+  it "must have a surname" do
+    assert(build(:user, surname: "Silverlock").valid?)
+    assert(build(:user, surname: nil).invalid?)
+  end
+
   describe "#membership_in" do
     let(:team) { create(:team) }
     subject { user.membership_in(team) }
