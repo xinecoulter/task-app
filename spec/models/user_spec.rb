@@ -151,8 +151,9 @@ describe User do
     let(:uid) { "24601" }
     let(:token) { "token" }
     let(:expires_at) { 1.month.from_now }
+    let(:info) { double(first_name: "Mia", last_name: "Mizoguchi") }
     let(:credentials) { double(token: token, expires_at: expires_at) }
-    let(:auth) { double(provider: name, uid: uid, credentials: credentials ) }
+    let(:auth) { double(provider: name, uid: uid, info: info, credentials: credentials ) }
     subject { user.add_identity(auth) }
 
     it "returns the identity that matches the auth hash" do

@@ -43,8 +43,9 @@ describe Identity do
     let(:uid) { "24601" }
     let(:token) { "token" }
     let(:expires_at) { 1.month.from_now }
+    let(:info) { double(first_name: "Barbara", last_name: "Gordon") }
     let(:credentials) { double(token: token, expires_at: expires_at) }
-    let(:auth) { double(provider: name, uid: uid, credentials: credentials ) }
+    let(:auth) { double(provider: name, uid: uid, info: info, credentials: credentials ) }
     subject { Identity.from_omniauth(auth) }
 
     context "when an identity with the auth provider and uid exists" do
@@ -75,6 +76,14 @@ describe Identity do
 
       it "assigns the oauth_expires_at" do
         assert(Time.at(expires_at) == subject.oauth_expires_at)
+      end
+
+      it "assigns the given_name" do
+        assert("Barbara" == subject.given_name)
+      end
+
+      it "assigns the surname" do
+        assert("Gordon" == subject.surname)
       end
     end
   end
