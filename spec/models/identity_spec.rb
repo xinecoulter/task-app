@@ -28,6 +28,16 @@ describe Identity do
     assert(build(:identity, oauth_expires_at: nil).valid?)
   end
 
+  it "can have a given_name" do
+    assert(build(:identity, given_name: "Scott").valid?)
+    assert(build(:identity, given_name: nil).valid?)
+  end
+
+  it "can have a surname" do
+    assert(build(:identity, surname: "Lang").valid?)
+    assert(build(:identity, surname: nil).valid?)
+  end
+
   describe ".from_omniauth" do
     let(:name) { "instagraph" }
     let(:uid) { "24601" }
