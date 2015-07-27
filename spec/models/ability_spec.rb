@@ -122,4 +122,16 @@ describe Ability do
       expect(ability).to_not be_able_to(:destroy, membership)
     end
   end
+
+  describe "identities" do
+    it "can destroy an identity it owns" do
+      identity = build(:identity, user: user)
+      expect(ability).to be_able_to(:destroy, identity)
+    end
+
+    it "cannot destroy an identity that it does not own" do
+      identity = build(:identity, user: other_user)
+      expect(ability).to_not be_able_to(:destroy, identity)
+    end
+  end
 end

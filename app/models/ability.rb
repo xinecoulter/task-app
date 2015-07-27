@@ -14,7 +14,7 @@ class Ability
                :update,
                :destroy,
                :view_edit] => { Task => :user_id },
-              [:destroy] => { TeamMembership => :member_id }
+              [:destroy] => { TeamMembership => :member_id, Identity => :user_id }
 
     can_with_owner_role [:manage]  => [Team]
 
