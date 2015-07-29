@@ -13,7 +13,17 @@ class UserDecorator < Draper::Decorator
       status = "tied"
     end
 
-    "#{status} in this month's chore challenge for #{team.name} in World of WarTask"
+    opponent = team.members.where.not(id: self).first.decorate
+
+    "I #{status} against #{opponent.facebook_name} in this month's chore challenge for #{team.name} in World of WarTask!"
+  end
+
+  def name
+    "#{given_name} #{surname}"
+  end
+
+  def facebook_name
+    facebook_identity ? "#{facebook_identity.given_name} #{facebook_identity.surname}" : name
   end
 
 end
