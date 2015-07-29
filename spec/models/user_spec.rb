@@ -216,4 +216,23 @@ describe User do
     end
   end
 
+  describe "#facebook_identity" do
+    let!(:identity1) { create(:identity, user: user, name: "pixtagraph") }
+    let!(:identity2) { create(:identity, user: user, name: "hooq") }
+    subject { user.facebook_identity }
+
+    context "when the user has a facebook identity" do
+      let!(:identity3) { create(:identity, user: user, name: "facebook") }
+      it "is the identity" do
+        assert(identity3 == subject)
+      end
+    end
+
+    context "when the user does not have a facebook identity" do
+      it "is nil" do
+        assert(subject.nil?)
+      end
+    end
+  end
+
 end
