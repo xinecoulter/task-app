@@ -3,13 +3,11 @@ class UserDecorator < Draper::Decorator
 
   def team_result_message(team)
     score = score_in(team)
-    other_score_points = team.scores.where.not(id: score).pluck(:points)
-    lower_score_points = other_score_points.select { |points| score.points > points }
-    higher_score_points = other_score_points.select { |points| score.points < points }
+    opponent_score = team.scores.where.not(id: score).first
 
-    if lower_score_points.count == other_score_points.count
+    if score.points > opponent_score.points
       status = "won"
-    elsif higher_score_points.any?
+    elsif score.points < opponent_score.points
       status = "lost"
     else
       status = "tied"
